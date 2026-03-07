@@ -8,9 +8,26 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Security\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Persistence\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PawsTrack.Application\PawsTrack.Application.csproj" />
+    <ProjectReference Include="..\PawsTrack.Domain\PawsTrack.Domain.csproj" />
   </ItemGroup>
 
 </Project>

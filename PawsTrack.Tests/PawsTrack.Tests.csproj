@@ -11,7 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="8.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
@@ -24,6 +26,12 @@
     <Folder Include="Application\" />
     <Folder Include="Domain\" />
     <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PawsTrack.Application\PawsTrack.Application.csproj" />
+    <ProjectReference Include="..\PawsTrack.Domain\PawsTrack.Domain.csproj" />
+    <ProjectReference Include="..\PawsTrack.Infrastructure\PawsTrack.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
