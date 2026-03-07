@@ -10,6 +10,7 @@ namespace PawsTrack.Presentation.Forms
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Panel pnlContent;
         private System.Windows.Forms.Label lblPlaceholder;
+        private System.Windows.Forms.Button btnNewIntake;
 
         protected override void Dispose(bool disposing)
         {
@@ -26,6 +27,7 @@ namespace PawsTrack.Presentation.Forms
             btnLogout      = new System.Windows.Forms.Button();
             pnlContent     = new System.Windows.Forms.Panel();
             lblPlaceholder = new System.Windows.Forms.Label();
+            btnNewIntake   = new System.Windows.Forms.Button();
 
             pnlHeader.SuspendLayout();
             pnlContent.SuspendLayout();
@@ -54,8 +56,15 @@ namespace PawsTrack.Presentation.Forms
             btnLogout.Location = new System.Drawing.Point(880, 14);
             btnLogout.Click   += new System.EventHandler(btnLogout_Click);
 
+            // ── btnNewIntake ──────────────────────────────────────────────────
+            btnNewIntake.Text     = "New Client & Dog Intake";
+            btnNewIntake.Location = new System.Drawing.Point(24, 24);
+            btnNewIntake.Size     = new System.Drawing.Size(200, 42);
+            btnNewIntake.Click   += new System.EventHandler(btnNewIntake_Click);
+
             // ── pnlContent ───────────────────────────────────────────────────
             pnlContent.Controls.Add(lblPlaceholder);
+            pnlContent.Controls.Add(btnNewIntake);
             pnlContent.Dock      = System.Windows.Forms.DockStyle.Fill;
             pnlContent.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
 

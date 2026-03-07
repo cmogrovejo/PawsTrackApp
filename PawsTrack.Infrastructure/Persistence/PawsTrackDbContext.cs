@@ -8,7 +8,9 @@ namespace PawsTrack.Infrastructure.Persistence
     /// </summary>
     public sealed class PawsTrackDbContext : DbContext
     {
-        public DbSet<User> Users => Set<User>();
+        public DbSet<User>   Users   => Set<User>();
+        public DbSet<Client> Clients => Set<Client>();
+        public DbSet<Dog>    Dogs    => Set<Dog>();
 
         public PawsTrackDbContext(DbContextOptions<PawsTrackDbContext> options) : base(options) { }
 
@@ -16,6 +18,47 @@ namespace PawsTrack.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
             ConfigureUsers(modelBuilder);
+            ConfigureClients(modelBuilder);
+            ConfigureDogs(modelBuilder);
+        }
+
+        private static void ConfigureClients(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Client>(entity =>
+            {
+                entity.ToTable("Clients");
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Id).ValueGeneratedOnAdd();
+
+                entity.Property(c => c.FullName).IsRequired().HasMaxLength(200);
+                entity.Property(c => c.Phone).IsRequired().HasMaxLength(20);
+                entity.Property(c => c.Address).IsRequired().HasMaxLength(300);
+                entity.Property(c => c.CreatedAt).IsRequired();
+
+                entity.Navigation(c => c.Dogs).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+                entity.HasMany(c => c.Dogs)
+                      .WithOne(d => d.Client)
+                      .HasForeignKey(d => d.ClientId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+        }
+
+        private static void ConfigureDogs(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Dog>(entity =>
+            {
+                entity.ToTable("Dogs");
+                entity.HasKey(d => d.Id);
+                entity.Property(d => d.Id).ValueGeneratedOnAdd();
+
+                entity.Property(d => d.Name).IsRequired().HasMaxLength(100);
+                entity.Property(d => d.AgeYears).IsRequired();
+                entity.Property(d => d.Breed).IsRequired().HasMaxLength(100);
+                entity.Property(d => d.MedicalNotes).IsRequired(false).HasMaxLength(2000);
+                entity.Property(d => d.ClientId).IsRequired();
+                entity.Property(d => d.CreatedAt).IsRequired();
+            });
         }
 
         private static void ConfigureUsers(ModelBuilder modelBuilder)

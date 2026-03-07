@@ -40,6 +40,7 @@ namespace PawsTrack.Presentation
             services.AddTransient<LoginForm>();
             services.AddTransient<FirstRunSetupForm>();
             services.AddTransient<MainDashboardForm>();
+            services.AddTransient<ClientIntakeForm>();
 
             ServiceProvider = services.BuildServiceProvider();
 

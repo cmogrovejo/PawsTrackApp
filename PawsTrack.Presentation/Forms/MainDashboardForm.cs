@@ -1,11 +1,15 @@
+using Microsoft.Extensions.DependencyInjection;
 using PawsTrack.Presentation.Helpers;
 
 namespace PawsTrack.Presentation.Forms
 {
     public partial class MainDashboardForm : Form
     {
-        public MainDashboardForm()
+        private readonly IServiceProvider _serviceProvider;
+
+        public MainDashboardForm(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             InitializeComponent();
             ApplyStyles();
         }
@@ -25,6 +29,9 @@ namespace PawsTrack.Presentation.Forms
 
             AppStyles.StylePrimaryButton(btnLogout);
             btnLogout.BackColor = Color.FromArgb(211, 47, 47);
+
+            AppStyles.StylePrimaryButton(btnNewIntake);
+            btnNewIntake.BackColor = AppStyles.AccentColor;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -34,6 +41,11 @@ namespace PawsTrack.Presentation.Forms
             var user = SessionContext.CurrentUser!;
             lblAppTitle.Text = "PawsTrack";
             lblUserInfo.Text = $"{user.FullName}  \u00B7  {user.Role}";
+        }
+
+        private void btnNewIntake_Click(object sender, EventArgs e)
+        {
+            Program.ServiceProvider.GetRequiredService<ClientIntakeForm>().ShowDialog(this);
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
