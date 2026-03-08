@@ -22,4 +22,12 @@ namespace PawsTrack.Application.DTOs
         public int DogId { get; init; }
         public string DogName { get; init; } = string.Empty;
     }
+
+    public class ClientSummaryDto
+    {
+        public int Id { get; init; }
+        public string FullName { get; init; } = string.Empty;
+        public string Phone { get; init; } = string.Empty;
+        public string Address { get; init; } = string.Empty;
+    }
 }

@@ -10,6 +10,7 @@ namespace PawsTrack.Application.Interfaces
     {
         Task<LoginResult> LoginAsync(string username, string password);
         Task<bool> CreateInitialAdminAsync(string username, string password, string fullName);
+        Task<bool> CreateWalkerAsync(string username, string password, string fullName);
         Task<bool> ResetUserPasswordAsync(int userId, string newPassword);
     }
 }

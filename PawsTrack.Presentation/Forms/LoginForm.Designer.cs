@@ -13,6 +13,7 @@ namespace PawsTrack.Presentation.Forms
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.LinkLabel lnkRegister;
 
         protected override void Dispose(bool disposing)
         {
@@ -32,6 +33,7 @@ namespace PawsTrack.Presentation.Forms
             txtPassword      = new System.Windows.Forms.TextBox();
             lblError         = new System.Windows.Forms.Label();
             btnLogin         = new System.Windows.Forms.Button();
+            lnkRegister      = new System.Windows.Forms.LinkLabel();
 
             pnlCard.SuspendLayout();
             SuspendLayout();
@@ -45,8 +47,9 @@ namespace PawsTrack.Presentation.Forms
             pnlCard.Controls.Add(txtPassword);
             pnlCard.Controls.Add(lblError);
             pnlCard.Controls.Add(btnLogin);
+            pnlCard.Controls.Add(lnkRegister);
             pnlCard.Location  = new System.Drawing.Point(40, 50);
-            pnlCard.Size      = new System.Drawing.Size(340, 400);
+            pnlCard.Size      = new System.Drawing.Size(340, 414);
             pnlCard.BackColor = System.Drawing.Color.White;
 
             // ── lblTitle ─────────────────────────────────────────────────────
@@ -91,10 +94,17 @@ namespace PawsTrack.Presentation.Forms
             btnLogin.Size     = new System.Drawing.Size(280, 42);
             btnLogin.Click   += new System.EventHandler(btnLogin_Click);
 
+            // ── lnkRegister ──────────────────────────────────────────────────
+            lnkRegister.Text      = "Register new walker account";
+            lnkRegister.Location  = new System.Drawing.Point(30, 370);
+            lnkRegister.Size      = new System.Drawing.Size(280, 22);
+            lnkRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lnkRegister.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(lnkRegister_LinkClicked);
+
             // ── LoginForm ────────────────────────────────────────────────────
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize          = new System.Drawing.Size(420, 500);
+            ClientSize          = new System.Drawing.Size(420, 514);
             FormBorderStyle     = System.Windows.Forms.FormBorderStyle.FixedSingle;
             MaximizeBox         = false;
             StartPosition       = System.Windows.Forms.FormStartPosition.CenterScreen;

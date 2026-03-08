@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PawsTrack.Application.DTOs;
 using PawsTrack.Application.Interfaces;
+using PawsTrack.Domain.Enums;
 using PawsTrack.Presentation.Helpers;
 
 namespace PawsTrack.Presentation.Forms
@@ -38,6 +39,7 @@ namespace PawsTrack.Presentation.Forms
             AppStyles.StyleInput(txtUsername);
             AppStyles.StyleInput(txtPassword);
             AppStyles.StylePrimaryButton(btnLogin);
+            lnkRegister.Font = AppStyles.SmallFont;
 
             txtPassword.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) btnLogin_Click(s, e!); };
         }
@@ -66,7 +68,10 @@ namespace PawsTrack.Presentation.Forms
 
             SessionContext.SetUser(result.User!);
 
-            var dashboard = Program.ServiceProvider.GetRequiredService<MainDashboardForm>();
+            Form dashboard = result.User!.Role == UserRole.Admin
+                ? Program.ServiceProvider.GetRequiredService<MainDashboardAdminForm>()
+                : Program.ServiceProvider.GetRequiredService<MainDashboardWalkerForm>();
+
             dashboard.FormClosed += (s, args) =>
             {
                 SessionContext.Clear();
@@ -75,6 +80,11 @@ namespace PawsTrack.Presentation.Forms
             };
             dashboard.Show();
             Hide();
+        }
+
+        private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Program.ServiceProvider.GetRequiredService<RegisterWalkerForm>().ShowDialog(this);
         }
 
         private void ResetForm()

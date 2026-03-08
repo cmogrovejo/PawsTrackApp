@@ -181,6 +181,54 @@ public class AuthServiceTests
         await act.Should().ThrowAsync<ArgumentException>();
     }
 
+    // ── Walker registration ────────────────────────────────────────────────
+
+    [Fact]
+    public async Task CreateWalkerAsync_ValidData_CreatesWalkerUser()
+    {
+        _userRepoMock.Setup(r => r.GetByUsernameAsync("newwalker")).ReturnsAsync((User?)null);
+        _hasherMock.Setup(h => h.Hash(It.IsAny<string>())).Returns("hashed");
+
+        var result = await _sut.CreateWalkerAsync("newwalker", "SecurePass1", "New Walker");
+
+        result.Should().BeTrue();
+        _userRepoMock.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task CreateWalkerAsync_DuplicateUsername_ThrowsArgumentException()
+    {
+        var existing = User.Create("walker1", "hashed", "Existing Walker");
+        _userRepoMock.Setup(r => r.GetByUsernameAsync("walker1")).ReturnsAsync(existing);
+
+        var act = async () => await _sut.CreateWalkerAsync("walker1", "SecurePass1", "New Walker");
+
+        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*already taken*");
+        _userRepoMock.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Never);
+    }
+
+    [Theory]
+    [InlineData("short1")]        // Too short
+    [InlineData("alllowercase1")] // No uppercase
+    [InlineData("NoNumbers")]     // No digit
+    public async Task CreateWalkerAsync_WeakPassword_ThrowsArgumentException(string weakPassword)
+    {
+        _userRepoMock.Setup(r => r.GetByUsernameAsync(It.IsAny<string>())).ReturnsAsync((User?)null);
+
+        var act = async () => await _sut.CreateWalkerAsync("walker1", weakPassword, "New Walker");
+
+        await act.Should().ThrowAsync<ArgumentException>();
+    }
+
+    [Fact]
+    public async Task CreateWalkerAsync_EmptyUsername_ThrowsArgumentException()
+    {
+        var act = async () => await _sut.CreateWalkerAsync("   ", "SecurePass1", "New Walker");
+
+        await act.Should().ThrowAsync<ArgumentException>();
+        _userRepoMock.Verify(r => r.GetByUsernameAsync(It.IsAny<string>()), Times.Never);
+    }
+
     // ── Password reset ─────────────────────────────────────────────────────
 
     [Fact]

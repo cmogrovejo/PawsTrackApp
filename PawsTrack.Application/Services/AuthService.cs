@@ -85,6 +85,28 @@ namespace PawsTrack.Application.Services
             return true;
         }
 
+        public async Task<bool> CreateWalkerAsync(string username, string password, string fullName)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException("Username is required.", nameof(username));
+
+            if (string.IsNullOrWhiteSpace(fullName))
+                throw new ArgumentException("Full name is required.", nameof(fullName));
+
+            var normalizedUsername = username.Trim().ToLowerInvariant();
+
+            if (await _userRepository.GetByUsernameAsync(normalizedUsername) is not null)
+                throw new ArgumentException("Username is already taken.");
+
+            ValidatePasswordStrength(password);
+
+            var hash = _passwordHasher.Hash(password);
+            var walker = User.Create(normalizedUsername, hash, fullName.Trim(), UserRole.Walker);
+
+            await _userRepository.AddAsync(walker);
+            return true;
+        }
+
         public async Task<bool> ResetUserPasswordAsync(int userId, string newPassword)
         {
             if (string.IsNullOrWhiteSpace(newPassword))

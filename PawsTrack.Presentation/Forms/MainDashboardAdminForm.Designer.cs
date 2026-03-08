@@ -1,6 +1,6 @@
 namespace PawsTrack.Presentation.Forms
 {
-    partial class MainDashboardForm
+    partial class MainDashboardAdminForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -10,7 +10,9 @@ namespace PawsTrack.Presentation.Forms
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Panel pnlContent;
         private System.Windows.Forms.Label lblPlaceholder;
+        private System.Windows.Forms.Label lblSectionActions;
         private System.Windows.Forms.Button btnNewIntake;
+        private System.Windows.Forms.Button btnRegisterWalker;
 
         protected override void Dispose(bool disposing)
         {
@@ -21,13 +23,15 @@ namespace PawsTrack.Presentation.Forms
 
         private void InitializeComponent()
         {
-            pnlHeader      = new System.Windows.Forms.Panel();
-            lblAppTitle    = new System.Windows.Forms.Label();
-            lblUserInfo    = new System.Windows.Forms.Label();
-            btnLogout      = new System.Windows.Forms.Button();
-            pnlContent     = new System.Windows.Forms.Panel();
-            lblPlaceholder = new System.Windows.Forms.Label();
-            btnNewIntake   = new System.Windows.Forms.Button();
+            pnlHeader         = new System.Windows.Forms.Panel();
+            lblAppTitle       = new System.Windows.Forms.Label();
+            lblUserInfo       = new System.Windows.Forms.Label();
+            btnLogout         = new System.Windows.Forms.Button();
+            pnlContent        = new System.Windows.Forms.Panel();
+            lblSectionActions = new System.Windows.Forms.Label();
+            btnNewIntake      = new System.Windows.Forms.Button();
+            btnRegisterWalker = new System.Windows.Forms.Button();
+            lblPlaceholder    = new System.Windows.Forms.Label();
 
             pnlHeader.SuspendLayout();
             pnlContent.SuspendLayout();
@@ -37,8 +41,8 @@ namespace PawsTrack.Presentation.Forms
             pnlHeader.Controls.Add(lblAppTitle);
             pnlHeader.Controls.Add(lblUserInfo);
             pnlHeader.Controls.Add(btnLogout);
-            pnlHeader.Dock     = System.Windows.Forms.DockStyle.Top;
-            pnlHeader.Height   = 64;
+            pnlHeader.Dock   = System.Windows.Forms.DockStyle.Top;
+            pnlHeader.Height = 64;
 
             // ── lblAppTitle ──────────────────────────────────────────────────
             lblAppTitle.Text     = "PawsTrack";
@@ -56,30 +60,43 @@ namespace PawsTrack.Presentation.Forms
             btnLogout.Location = new System.Drawing.Point(880, 14);
             btnLogout.Click   += new System.EventHandler(btnLogout_Click);
 
-            // ── btnNewIntake ──────────────────────────────────────────────────
+            // ── lblSectionActions ────────────────────────────────────────────
+            lblSectionActions.Text     = "Quick Actions";
+            lblSectionActions.Location = new System.Drawing.Point(24, 16);
+            lblSectionActions.Size     = new System.Drawing.Size(200, 24);
+
+            // ── btnNewIntake ─────────────────────────────────────────────────
             btnNewIntake.Text     = "New Client & Dog Intake";
-            btnNewIntake.Location = new System.Drawing.Point(24, 24);
-            btnNewIntake.Size     = new System.Drawing.Size(200, 42);
+            btnNewIntake.Location = new System.Drawing.Point(24, 52);
+            btnNewIntake.Size     = new System.Drawing.Size(220, 42);
             btnNewIntake.Click   += new System.EventHandler(btnNewIntake_Click);
 
-            // ── pnlContent ───────────────────────────────────────────────────
-            pnlContent.Controls.Add(lblPlaceholder);
-            pnlContent.Controls.Add(btnNewIntake);
-            pnlContent.Dock      = System.Windows.Forms.DockStyle.Fill;
-            pnlContent.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
+            // ── btnRegisterWalker ────────────────────────────────────────────
+            btnRegisterWalker.Text     = "Register New Walker";
+            btnRegisterWalker.Location = new System.Drawing.Point(256, 52);
+            btnRegisterWalker.Size     = new System.Drawing.Size(200, 42);
+            btnRegisterWalker.Click   += new System.EventHandler(btnRegisterWalker_Click);
 
             // ── lblPlaceholder ───────────────────────────────────────────────
-            lblPlaceholder.Text      = "Dashboard \u2014 more features coming soon.";
+            lblPlaceholder.Text      = "Admin Dashboard \u2014 more features coming soon.";
             lblPlaceholder.Dock      = System.Windows.Forms.DockStyle.Fill;
             lblPlaceholder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
-            // ── MainDashboardForm ────────────────────────────────────────────
+            // ── pnlContent ───────────────────────────────────────────────────
+            pnlContent.Controls.Add(lblPlaceholder);
+            pnlContent.Controls.Add(btnRegisterWalker);
+            pnlContent.Controls.Add(btnNewIntake);
+            pnlContent.Controls.Add(lblSectionActions);
+            pnlContent.Dock      = System.Windows.Forms.DockStyle.Fill;
+            pnlContent.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
+
+            // ── MainDashboardAdminForm ───────────────────────────────────────
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize          = new System.Drawing.Size(1000, 650);
             MinimumSize         = new System.Drawing.Size(900, 600);
             StartPosition       = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text                = "PawsTrack";
+            Text                = "PawsTrack \u2014 Admin";
             Controls.Add(pnlContent);
             Controls.Add(pnlHeader);
 

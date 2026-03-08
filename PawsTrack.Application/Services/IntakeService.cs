@@ -34,5 +34,36 @@ namespace PawsTrack.Application.Services
                 DogName        = dog.Name
             };
         }
+
+        public async Task<IReadOnlyList<ClientSummaryDto>> SearchClientsAsync(string searchTerm)
+        {
+            var clients = await _clientRepository.SearchAsync(searchTerm ?? string.Empty);
+            return clients.Select(c => new ClientSummaryDto
+            {
+                Id       = c.Id,
+                FullName = c.FullName,
+                Phone    = c.Phone,
+                Address  = c.Address
+            }).ToList();
+        }
+
+        public async Task<ClientCreatedDto> AddDogToExistingClientAsync(int clientId, CreateDogRequest dogReq)
+        {
+            if (dogReq is null) throw new ArgumentNullException(nameof(dogReq));
+
+            var client = await _clientRepository.GetByIdAsync(clientId)
+                ?? throw new ArgumentException($"Client with ID {clientId} not found.");
+
+            var dog = Dog.Create(dogReq.Name, dogReq.AgeYears, dogReq.Breed, dogReq.MedicalNotes, client.Id);
+            await _dogRepository.AddAsync(dog);
+
+            return new ClientCreatedDto
+            {
+                ClientId       = client.Id,
+                ClientFullName = client.FullName,
+                DogId          = dog.Id,
+                DogName        = dog.Name
+            };
+        }
     }
 }

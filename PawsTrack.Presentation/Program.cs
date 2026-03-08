@@ -17,9 +17,13 @@ namespace PawsTrack.Presentation
     internal static class Program
     {
         public static IServiceProvider ServiceProvider { get; private set; } = null!;
-        
+
+        // Must be void (not async Task) so [STAThread] remains in effect for the
+        // entire lifetime of the process. Using async Task Main causes the message
+        // loop — and all button-click handlers — to run on an MTA thread pool
+        // thread, which breaks OLE calls such as ComboBox AutoComplete.
         [STAThread]
-        static async Task Main()
+        static void Main()
         {
             ApplicationConfiguration.Initialize();
 
@@ -39,33 +43,37 @@ namespace PawsTrack.Presentation
             // Register WinForms (transient so each form gets a fresh instance)
             services.AddTransient<LoginForm>();
             services.AddTransient<FirstRunSetupForm>();
-            services.AddTransient<MainDashboardForm>();
-            services.AddTransient<ClientIntakeForm>();
+            services.AddTransient<MainDashboardWalkerForm>();
+            services.AddTransient<MainDashboardAdminForm>();
+            services.AddTransient<ClientIntakeUC>();
+            services.AddTransient<RegisterWalkerForm>();
 
             ServiceProvider = services.BuildServiceProvider();
 
             // --- Database: apply migrations ---
+            // Task.Run offloads the async work to the thread pool so the STA
+            // thread is never abandoned and OLE/WinForms controls stay on STA.
             try
             {
-                await ServiceProvider.InitializeDatabaseAsync();
+                Task.Run(() => ServiceProvider.InitializeDatabaseAsync()).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
                     $"Failed to connect to the database.\n\n{ex.Message}\n\nPlease check your connection string in appsettings.json.",
-                    "PawsTrack � Database Error",
+                    "PawsTrack \u26a0 Database Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
             }
 
             // If no users exist at all, run first-time setup
-            bool hasUsers;
-            await using (var scope = ServiceProvider.CreateAsyncScope())
+            bool hasUsers = Task.Run(async () =>
             {
+                await using var scope = ServiceProvider.CreateAsyncScope();
                 var userRepo = scope.ServiceProvider.GetRequiredService<IUserRepository>();
-                hasUsers = await userRepo.AnyExistsAsync();
-            }
+                return await userRepo.AnyExistsAsync();
+            }).GetAwaiter().GetResult();
 
             Form startingForm = hasUsers
                 ? ServiceProvider.GetRequiredService<LoginForm>()

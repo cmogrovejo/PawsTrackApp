@@ -29,6 +29,17 @@ namespace PawsTrack.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IReadOnlyList<Client>> SearchAsync(string searchTerm)
+        {
+            var term = searchTerm?.Trim().ToLower() ?? string.Empty;
+            var query = _context.Clients.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(term))
+                query = query.Where(c => c.FullName.ToLower().Contains(term) || c.Phone.Contains(term));
+
+            return await query.OrderBy(c => c.FullName).ToListAsync();
+        }
+
         public async Task AddAsync(Client client)
         {
             await _context.Clients.AddAsync(client);

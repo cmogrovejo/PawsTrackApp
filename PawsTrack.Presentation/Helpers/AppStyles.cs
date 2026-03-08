@@ -21,6 +21,7 @@
         public static readonly Font TitleFont = new Font("Segoe UI", 22f, FontStyle.Bold);
         public static readonly Font SubtitleFont = new Font("Segoe UI", 11f, FontStyle.Regular);
         public static readonly Font LabelFont = new Font("Segoe UI", 9.5f, FontStyle.Regular);
+        public static readonly Font LabelAccentFont = new Font("Segoe UI", 9.5f, FontStyle.Bold);
         public static readonly Font InputFont = new Font("Segoe UI", 10f, FontStyle.Regular);
         public static readonly Font ButtonFont = new Font("Segoe UI", 10f, FontStyle.Bold);
         public static readonly Font SmallFont = new Font("Segoe UI", 8.5f, FontStyle.Regular);
