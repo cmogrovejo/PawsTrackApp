@@ -2,6 +2,7 @@ namespace PawsTrack.Application.DTOs
 {
     public class CreateWalkServiceRequest
     {
+        public int      WalkerId  { get; init; }
         public int      ClientId  { get; init; }
         public int      DogId     { get; init; }
         public DateTime StartTime { get; init; }

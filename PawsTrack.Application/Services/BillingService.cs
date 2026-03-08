@@ -24,9 +24,9 @@ namespace PawsTrack.Application.Services
             _billRepo   = billRepo;
         }
 
-        public async Task<IReadOnlyList<BillableServiceDto>> SearchServicesAsync(string? clientName, DateTime? date)
+        public async Task<IReadOnlyList<BillableServiceDto>> SearchServicesAsync(string? clientName, DateTime? date, int? walkerId = null)
         {
-            var services = await _walkRepo.SearchAsync(clientName, date, WalkStatus.Created);
+            var services = await _walkRepo.SearchAsync(clientName, date, WalkStatus.Created, walkerId);
 
             var result = new List<BillableServiceDto>(services.Count);
             foreach (var ws in services)
@@ -51,6 +51,10 @@ namespace PawsTrack.Application.Services
             return result;
         }
 
+        public Task<IReadOnlyList<BillReportRowDto>> GetReportAsync(
+            string? clientName, DateTime from, DateTime to, int? walkerId = null)
+            => _billRepo.GetReportAsync(clientName, from, to, walkerId);
+
         public async Task<BillDto> CreateBillAsync(CreateBillRequest request)
         {
             var ws = await _walkRepo.GetByIdAsync(request.WalkServiceId)
@@ -63,6 +67,9 @@ namespace PawsTrack.Application.Services
             var bill = Bill.Create(request.WalkServiceId, request.RatePerHour, request.Discount, durationHours);
 
             await _billRepo.AddAsync(bill);
+
+            ws.Complete();
+            await _walkRepo.UpdateAsync(ws);
 
             return new BillDto(bill.Id, bill.WalkServiceId, bill.RatePerHour,
                                bill.Discount, bill.TotalAmount, bill.CreatedAt);

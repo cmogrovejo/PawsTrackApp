@@ -90,9 +90,20 @@ namespace PawsTrack.Presentation.Forms
                 return;
             }
 
-            lblError.Visible     = false;
+            var confirm = MessageBox.Show(
+                "This action cannot be undone.\n\n" +
+                "Once the bill is created the service will be marked as Completed and can no longer be edited or deleted.\n\n" +
+                "Do you want to proceed?",
+                "Confirm Billing",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (confirm != DialogResult.Yes) return;
+
+            lblError.Visible      = false;
             btnCreateBill.Enabled = false;
-            btnCreateBill.Text   = "Creating...";
+            btnCreateBill.Text    = "Creating...";
 
             try
             {

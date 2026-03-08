@@ -34,7 +34,7 @@ namespace PawsTrack.Application.Services
             if (dog.ClientId != client.Id)
                 throw new ArgumentException("The selected dog does not belong to the selected client.");
 
-            var service = WalkService.Create(request.ClientId, request.DogId, request.StartTime, request.EndTime);
+            var service = WalkService.Create(request.WalkerId, request.ClientId, request.DogId, request.StartTime, request.EndTime);
             await _walkRepo.AddAsync(service);
 
             return new WalkServiceCreatedDto
@@ -54,9 +54,9 @@ namespace PawsTrack.Application.Services
             return dogs.Select(d => new DogSummaryDto { Id = d.Id, Name = d.Name }).ToList();
         }
 
-        public async Task<IReadOnlyList<WalkServiceCreatedDto>> GetByDateAsync(DateTime date)
+        public async Task<IReadOnlyList<WalkServiceCreatedDto>> GetByDateAsync(DateTime date, int? walkerId = null)
         {
-            var walks = await _walkRepo.GetByDateAsync(date);
+            var walks = await _walkRepo.GetByDateAsync(date, walkerId);
 
             var result = new List<WalkServiceCreatedDto>(walks.Count);
             foreach (var w in walks)

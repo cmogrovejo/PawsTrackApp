@@ -24,18 +24,24 @@ namespace PawsTrack.Infrastructure.Repositories
         public async Task<WalkService?> GetByIdAsync(int id)
             => await _context.WalkServices.FindAsync(id);
 
-        public async Task<IReadOnlyList<WalkService>> GetByDateAsync(DateTime date)
+        public async Task<IReadOnlyList<WalkService>> GetByDateAsync(DateTime date, int? walkerId = null)
         {
-            return await _context.WalkServices
+            var query = _context.WalkServices
                 .AsNoTracking()
-                .Where(s => s.StartTime.Date == date.Date)
-                .OrderBy(s => s.StartTime)
-                .ToListAsync();
+                .Where(s => s.StartTime.Date == date.Date);
+
+            if (walkerId.HasValue)
+                query = query.Where(s => s.WalkerId == walkerId.Value);
+
+            return await query.OrderBy(s => s.StartTime).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<WalkService>> SearchAsync(string? clientName, DateTime? date, WalkStatus? status)
+        public async Task<IReadOnlyList<WalkService>> SearchAsync(string? clientName, DateTime? date, WalkStatus? status, int? walkerId = null)
         {
             var query = _context.WalkServices.AsNoTracking().AsQueryable();
+
+            if (walkerId.HasValue)
+                query = query.Where(ws => ws.WalkerId == walkerId.Value);
 
             if (status.HasValue)
                 query = query.Where(ws => ws.Status == status.Value);

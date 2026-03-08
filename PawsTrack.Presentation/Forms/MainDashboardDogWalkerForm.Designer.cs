@@ -1,6 +1,6 @@
 namespace PawsTrack.Presentation.Forms
 {
-    partial class MainDashboardWalkerForm
+    partial class MainDashboardDogWalkerForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -54,7 +54,20 @@ namespace PawsTrack.Presentation.Forms
 
         // Reports view
         private System.Windows.Forms.Panel pnlReportsView;
-        private System.Windows.Forms.Label lblReportsPlaceholder;
+        private System.Windows.Forms.Panel pnlReportsHeader;
+        private System.Windows.Forms.Label lblReportsTitle;
+        private System.Windows.Forms.Panel pnlReportsHeaderBorder;
+        private System.Windows.Forms.Panel pnlReportsSearch;
+        private System.Windows.Forms.Label lblReportClient;
+        private System.Windows.Forms.TextBox txtReportClient;
+        private System.Windows.Forms.Label lblReportFrom;
+        private System.Windows.Forms.DateTimePicker dtpReportFrom;
+        private System.Windows.Forms.Label lblReportTo;
+        private System.Windows.Forms.DateTimePicker dtpReportTo;
+        private System.Windows.Forms.Button btnReportSearch;
+        private System.Windows.Forms.Button btnGeneratePdf;
+        private System.Windows.Forms.Panel pnlReportsSearchBorder;
+        private System.Windows.Forms.Panel pnlReportsResults;
 
         protected override void Dispose(bool disposing)
         {
@@ -95,7 +108,20 @@ namespace PawsTrack.Presentation.Forms
             pnlBillingSearchBorder = new Panel();
             pnlBillingResults = new Panel();
             pnlReportsView = new Panel();
-            lblReportsPlaceholder = new Label();
+            pnlReportsHeader = new Panel();
+            lblReportsTitle = new Label();
+            pnlReportsHeaderBorder = new Panel();
+            pnlReportsSearch = new Panel();
+            lblReportClient = new Label();
+            txtReportClient = new TextBox();
+            lblReportFrom = new Label();
+            dtpReportFrom = new DateTimePicker();
+            lblReportTo = new Label();
+            dtpReportTo = new DateTimePicker();
+            btnReportSearch = new Button();
+            btnGeneratePdf = new Button();
+            pnlReportsSearchBorder = new Panel();
+            pnlReportsResults = new Panel();
             pnlIntakeView = new Panel();
             pnlSidebar = new Panel();
             btnNewService = new Button();
@@ -111,6 +137,8 @@ namespace PawsTrack.Presentation.Forms
             pnlBillingHeader.SuspendLayout();
             pnlBillingSearch.SuspendLayout();
             pnlReportsView.SuspendLayout();
+            pnlReportsHeader.SuspendLayout();
+            pnlReportsSearch.SuspendLayout();
             pnlSidebar.SuspendLayout();
             SuspendLayout();
             //
@@ -416,7 +444,9 @@ namespace PawsTrack.Presentation.Forms
             //
             // pnlReportsView
             //
-            pnlReportsView.Controls.Add(lblReportsPlaceholder);
+            pnlReportsView.Controls.Add(pnlReportsResults);
+            pnlReportsView.Controls.Add(pnlReportsSearch);
+            pnlReportsView.Controls.Add(pnlReportsHeader);
             pnlReportsView.Dock = DockStyle.Fill;
             pnlReportsView.Location = new Point(0, 0);
             pnlReportsView.Margin = new Padding(3, 4, 3, 4);
@@ -425,15 +455,141 @@ namespace PawsTrack.Presentation.Forms
             pnlReportsView.TabIndex = 2;
             pnlReportsView.Visible = false;
             //
-            // lblReportsPlaceholder
+            // pnlReportsHeader
             //
-            lblReportsPlaceholder.Dock = DockStyle.Fill;
-            lblReportsPlaceholder.Location = new Point(0, 0);
-            lblReportsPlaceholder.Name = "lblReportsPlaceholder";
-            lblReportsPlaceholder.Size = new Size(1189, 809);
-            lblReportsPlaceholder.TabIndex = 0;
-            lblReportsPlaceholder.Text = "Reports — coming soon.";
-            lblReportsPlaceholder.TextAlign = ContentAlignment.MiddleCenter;
+            pnlReportsHeader.BackColor = Color.White;
+            pnlReportsHeader.Controls.Add(lblReportsTitle);
+            pnlReportsHeader.Controls.Add(pnlReportsHeaderBorder);
+            pnlReportsHeader.Dock = DockStyle.Top;
+            pnlReportsHeader.Location = new Point(0, 0);
+            pnlReportsHeader.Name = "pnlReportsHeader";
+            pnlReportsHeader.Size = new Size(1189, 62);
+            pnlReportsHeader.TabIndex = 0;
+            //
+            // lblReportsTitle
+            //
+            lblReportsTitle.Location = new Point(18, 11);
+            lblReportsTitle.Name = "lblReportsTitle";
+            lblReportsTitle.Size = new Size(250, 40);
+            lblReportsTitle.TabIndex = 0;
+            lblReportsTitle.Text = "Billing Report";
+            lblReportsTitle.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // pnlReportsHeaderBorder
+            //
+            pnlReportsHeaderBorder.Dock = DockStyle.Bottom;
+            pnlReportsHeaderBorder.Location = new Point(0, 61);
+            pnlReportsHeaderBorder.Name = "pnlReportsHeaderBorder";
+            pnlReportsHeaderBorder.Size = new Size(1189, 1);
+            pnlReportsHeaderBorder.TabIndex = 1;
+            //
+            // pnlReportsSearch
+            //
+            pnlReportsSearch.BackColor = Color.White;
+            pnlReportsSearch.Controls.Add(lblReportClient);
+            pnlReportsSearch.Controls.Add(txtReportClient);
+            pnlReportsSearch.Controls.Add(lblReportFrom);
+            pnlReportsSearch.Controls.Add(dtpReportFrom);
+            pnlReportsSearch.Controls.Add(lblReportTo);
+            pnlReportsSearch.Controls.Add(dtpReportTo);
+            pnlReportsSearch.Controls.Add(btnReportSearch);
+            pnlReportsSearch.Controls.Add(btnGeneratePdf);
+            pnlReportsSearch.Controls.Add(pnlReportsSearchBorder);
+            pnlReportsSearch.Dock = DockStyle.Top;
+            pnlReportsSearch.Location = new Point(0, 62);
+            pnlReportsSearch.Name = "pnlReportsSearch";
+            pnlReportsSearch.Padding = new Padding(18, 8, 18, 0);
+            pnlReportsSearch.Size = new Size(1189, 56);
+            pnlReportsSearch.TabIndex = 1;
+            //
+            // lblReportClient
+            //
+            lblReportClient.Location = new Point(20, 14);
+            lblReportClient.Name = "lblReportClient";
+            lblReportClient.Size = new Size(50, 20);
+            lblReportClient.TabIndex = 0;
+            lblReportClient.Text = "Client:";
+            lblReportClient.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // txtReportClient
+            //
+            txtReportClient.Location = new Point(80, 11);
+            txtReportClient.Name = "txtReportClient";
+            txtReportClient.Size = new Size(180, 27);
+            txtReportClient.TabIndex = 1;
+            //
+            // lblReportFrom
+            //
+            lblReportFrom.Location = new Point(270, 14);
+            lblReportFrom.Name = "lblReportFrom";
+            lblReportFrom.Size = new Size(40, 20);
+            lblReportFrom.TabIndex = 2;
+            lblReportFrom.Text = "From:";
+            lblReportFrom.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // dtpReportFrom
+            //
+            dtpReportFrom.Format = DateTimePickerFormat.Short;
+            dtpReportFrom.Location = new Point(315, 11);
+            dtpReportFrom.Name = "dtpReportFrom";
+            dtpReportFrom.Size = new Size(130, 27);
+            dtpReportFrom.TabIndex = 3;
+            dtpReportFrom.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            //
+            // lblReportTo
+            //
+            lblReportTo.Location = new Point(455, 14);
+            lblReportTo.Name = "lblReportTo";
+            lblReportTo.Size = new Size(25, 20);
+            lblReportTo.TabIndex = 4;
+            lblReportTo.Text = "To:";
+            lblReportTo.TextAlign = ContentAlignment.MiddleLeft;
+            //
+            // dtpReportTo
+            //
+            dtpReportTo.Format = DateTimePickerFormat.Short;
+            dtpReportTo.Location = new Point(490, 11);
+            dtpReportTo.Name = "dtpReportTo";
+            dtpReportTo.Size = new Size(130, 27);
+            dtpReportTo.TabIndex = 5;
+            dtpReportTo.Value = DateTime.Today;
+            //
+            // btnReportSearch
+            //
+            btnReportSearch.Location = new Point(630, 9);
+            btnReportSearch.Name = "btnReportSearch";
+            btnReportSearch.Size = new Size(90, 32);
+            btnReportSearch.TabIndex = 6;
+            btnReportSearch.Text = "Search";
+            btnReportSearch.Click += btnReportSearch_Click;
+            //
+            // btnGeneratePdf
+            //
+            btnGeneratePdf.Enabled = false;
+            btnGeneratePdf.Location = new Point(730, 9);
+            btnGeneratePdf.Name = "btnGeneratePdf";
+            btnGeneratePdf.Size = new Size(130, 32);
+            btnGeneratePdf.TabIndex = 7;
+            btnGeneratePdf.Text = "Generate PDF";
+            btnGeneratePdf.Click += btnGeneratePdf_Click;
+            //
+            // pnlReportsSearchBorder
+            //
+            pnlReportsSearchBorder.Dock = DockStyle.Bottom;
+            pnlReportsSearchBorder.Location = new Point(18, 55);
+            pnlReportsSearchBorder.Name = "pnlReportsSearchBorder";
+            pnlReportsSearchBorder.Size = new Size(1153, 1);
+            pnlReportsSearchBorder.TabIndex = 8;
+            //
+            // pnlReportsResults
+            //
+            pnlReportsResults.AutoScroll = true;
+            pnlReportsResults.BackColor = Color.White;
+            pnlReportsResults.Dock = DockStyle.Fill;
+            pnlReportsResults.Location = new Point(0, 118);
+            pnlReportsResults.Name = "pnlReportsResults";
+            pnlReportsResults.Size = new Size(1189, 691);
+            pnlReportsResults.TabIndex = 2;
             //
             // pnlIntakeView
             //
@@ -510,6 +666,9 @@ namespace PawsTrack.Presentation.Forms
             pnlBillingHeader.ResumeLayout(false);
             pnlBillingSearch.ResumeLayout(false);
             pnlBillingSearch.PerformLayout();
+            pnlReportsHeader.ResumeLayout(false);
+            pnlReportsSearch.ResumeLayout(false);
+            pnlReportsSearch.PerformLayout();
             pnlReportsView.ResumeLayout(false);
             pnlSidebar.ResumeLayout(false);
             ResumeLayout(false);

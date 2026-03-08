@@ -7,8 +7,8 @@ namespace PawsTrack.Application.Interfaces
     {
         Task AddAsync(WalkService service);
         Task<WalkService?> GetByIdAsync(int id);
-        Task<IReadOnlyList<WalkService>> GetByDateAsync(DateTime date);
-        Task<IReadOnlyList<WalkService>> SearchAsync(string? clientName, DateTime? date, WalkStatus? status);
+        Task<IReadOnlyList<WalkService>> GetByDateAsync(DateTime date, int? walkerId = null);
+        Task<IReadOnlyList<WalkService>> SearchAsync(string? clientName, DateTime? date, WalkStatus? status, int? walkerId = null);
         Task UpdateAsync(WalkService service);
         Task DeleteAsync(WalkService service);
     }

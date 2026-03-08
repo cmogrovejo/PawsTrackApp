@@ -6,11 +6,12 @@ using PawsTrack.Presentation.UserControls;
 
 namespace PawsTrack.Presentation.Forms
 {
-    public partial class MainDashboardWalkerForm : Form
+    public partial class MainDashboardDogWalkerForm : Form
     {
         private readonly IServiceProvider _serviceProvider;
+        private IReadOnlyList<BillReportRowDto> _reportResults = [];
 
-        public MainDashboardWalkerForm(IServiceProvider serviceProvider)
+        public MainDashboardDogWalkerForm(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             InitializeComponent();
@@ -68,9 +69,24 @@ namespace PawsTrack.Presentation.Forms
             AppStyles.StylePrimaryButton(btnBillingSearch);
             btnBillingSearch.Height          = 32;
 
-            // Reports placeholder
-            lblReportsPlaceholder.Font      = AppStyles.SubtitleFont;
-            lblReportsPlaceholder.ForeColor = AppStyles.TextSecondary;
+            // Reports controls
+            lblReportsTitle.Font             = AppStyles.SubtitleFont;
+            lblReportsTitle.ForeColor        = AppStyles.TextPrimary;
+            pnlReportsHeaderBorder.BackColor = AppStyles.BorderColor;
+            pnlReportsSearchBorder.BackColor = AppStyles.BorderColor;
+            lblReportClient.Font = lblReportFrom.Font = lblReportTo.Font = AppStyles.LabelFont;
+            txtReportClient.Font  = AppStyles.InputFont;
+            dtpReportFrom.Font = dtpReportTo.Font = AppStyles.LabelFont;
+            AppStyles.StylePrimaryButton(btnReportSearch);
+            btnReportSearch.Height = 32;
+            btnGeneratePdf.FlatStyle = FlatStyle.Flat;
+            btnGeneratePdf.FlatAppearance.BorderSize = 1;
+            btnGeneratePdf.FlatAppearance.BorderColor = AppStyles.BorderColor;
+            btnGeneratePdf.BackColor = AppStyles.BackColor;
+            btnGeneratePdf.ForeColor = AppStyles.TextSecondary;
+            btnGeneratePdf.Font      = AppStyles.LabelFont;
+            btnGeneratePdf.Height    = 32;
+            btnGeneratePdf.Cursor    = Cursors.Hand;
         }
 
         private static void StyleTab(Button tab, bool active)
@@ -112,7 +128,7 @@ namespace PawsTrack.Presentation.Forms
             await using (var scope = _serviceProvider.CreateAsyncScope())
             {
                 var svc = scope.ServiceProvider.GetRequiredService<IWalkScheduleService>();
-                services = await svc.GetByDateAsync(date);
+                services = await svc.GetByDateAsync(date, SessionContext.CurrentUser!.Id);
             }
 
             const int minRowHeight = 62;
@@ -365,7 +381,7 @@ namespace PawsTrack.Presentation.Forms
             {
                 var svc = scope.ServiceProvider.GetRequiredService<IBillingService>();
                 var dateFilter = chkBillingDate.Checked ? dtpBillingDate.Value : (DateTime?)null;
-                services = await svc.SearchServicesAsync(txtBillingClient.Text.Trim(), dateFilter);
+                services = await svc.SearchServicesAsync(txtBillingClient.Text.Trim(), dateFilter, SessionContext.CurrentUser!.Id);
             }
 
             if (services.Count == 0)
@@ -447,10 +463,11 @@ namespace PawsTrack.Presentation.Forms
                 Cursor    = Cursors.Hand
             };
             btnBill.FlatAppearance.BorderSize = 0;
-            btnBill.Click += (_, _) =>
+            btnBill.Click += async (_, _) =>
             {
                 using var dlg = new CreateBillForm(_serviceProvider, capturedDto);
-                dlg.ShowDialog(this);
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                    await BuildBillingResultsAsync();
             };
 
             row.Controls.Add(accent);
@@ -458,6 +475,217 @@ namespace PawsTrack.Presentation.Forms
             row.Controls.Add(lblDetails);
             row.Controls.Add(btnBill);
             return row;
+        }
+
+        // ── Reports ───────────────────────────────────────────────────────────
+
+        private async void btnReportSearch_Click(object sender, EventArgs e)
+            => await BuildReportsResultsAsync();
+
+        private async Task BuildReportsResultsAsync()
+        {
+            if (dtpReportFrom.Value.Date > dtpReportTo.Value.Date)
+            {
+                MessageBox.Show("'From' date must be on or before 'To' date.",
+                    "Invalid Date Range", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            pnlReportsResults.SuspendLayout();
+            foreach (Control old in pnlReportsResults.Controls.Cast<Control>().ToList()) old.Dispose();
+            pnlReportsResults.Controls.Clear();
+
+            await using (var scope = _serviceProvider.CreateAsyncScope())
+            {
+                var svc = scope.ServiceProvider.GetRequiredService<IBillingService>();
+                _reportResults = await svc.GetReportAsync(
+                    txtReportClient.Text.Trim(),
+                    dtpReportFrom.Value.Date,
+                    dtpReportTo.Value.Date,
+                    SessionContext.CurrentUser!.Id);
+            }
+
+            bool hasData = _reportResults.Count > 0;
+            btnGeneratePdf.Enabled   = hasData;
+            btnGeneratePdf.BackColor = hasData ? AppStyles.AccentColor : AppStyles.BackColor;
+            btnGeneratePdf.ForeColor = hasData ? Color.White : AppStyles.TextSecondary;
+
+            if (!hasData)
+            {
+                pnlReportsResults.Controls.Add(new Label
+                {
+                    Text = "No bills found for the selected period.",
+                    Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleCenter,
+                    Font = AppStyles.SubtitleFont, ForeColor = AppStyles.TextSecondary
+                });
+            }
+            else
+            {
+                const int maxRows = 200;
+                var displayRows = _reportResults.Count > maxRows
+                    ? _reportResults.Take(maxRows).ToList()
+                    : _reportResults;
+
+                int y = 8;
+                foreach (var row in displayRows)
+                {
+                    var card = BuildReportRow(row);
+                    card.Location = new Point(2, y);
+                    pnlReportsResults.Controls.Add(card);
+                    y += card.Height + 4;
+                }
+
+                if (_reportResults.Count > maxRows)
+                {
+                    var note = new Label
+                    {
+                        Text = $"Showing first {maxRows} of {_reportResults.Count} results. Export to PDF for full data.",
+                        Location = new Point(2, y),
+                        AutoSize = true,
+                        Font = AppStyles.SmallFont,
+                        ForeColor = AppStyles.TextSecondary
+                    };
+                    pnlReportsResults.Controls.Add(note);
+                    y += 20;
+                }
+
+                var totalRow = BuildReportGrandTotal(_reportResults.Sum(r => r.TotalAmount));
+                totalRow.Location = new Point(2, y);
+                pnlReportsResults.Controls.Add(totalRow);
+                pnlReportsResults.AutoScrollMinSize = new Size(0, y + totalRow.Height + 4);
+            }
+
+            pnlReportsResults.ResumeLayout(true);
+        }
+
+        private Panel BuildReportRow(BillReportRowDto row)
+        {
+            var card = new Panel
+            {
+                Size      = new Size(pnlReportsResults.ClientSize.Width - 4, 64),
+                BackColor = Color.White
+            };
+            card.BorderStyle = BorderStyle.FixedSingle;
+
+            var accent = new Panel
+            {
+                Location  = new Point(0, 0),
+                Size      = new Size(4, card.Height),
+                BackColor = AppStyles.SuccessColor
+            };
+
+            int textW = card.Width - 200;
+
+            var lblOwner = new Label
+            {
+                Text         = $"{row.ClientName}  \u00B7  {row.DogName}",
+                Location     = new Point(12, 6),
+                Size         = new Size(textW, 18),
+                Font         = AppStyles.LabelAccentFont,
+                ForeColor    = AppStyles.TextPrimary,
+                AutoEllipsis = true
+            };
+
+            var lblDetails = new Label
+            {
+                Text         = $"{row.WalkDate:ddd dd/MM/yyyy}  {row.StartTime:HH:mm}\u2192{row.EndTime:HH:mm}  {row.DurationHours:F1} hrs  |  Rate: {row.RatePerHour:C}  Disc: {row.Discount:C}",
+                Location     = new Point(12, 26),
+                Size         = new Size(textW, 16),
+                Font         = AppStyles.SmallFont,
+                ForeColor    = AppStyles.TextSecondary,
+                AutoEllipsis = true
+            };
+
+            var lblBilledAt = new Label
+            {
+                Text         = $"Billed: {row.BilledAt:dd/MM/yyyy}",
+                Location     = new Point(12, 44),
+                Size         = new Size(textW, 16),
+                Font         = AppStyles.SmallFont,
+                ForeColor    = AppStyles.TextSecondary,
+                AutoEllipsis = true
+            };
+
+            var lblTotal = new Label
+            {
+                Text      = row.TotalAmount.ToString("C"),
+                Location  = new Point(card.Width - 130, 18),
+                Size      = new Size(120, 28),
+                Font      = new Font("Segoe UI", 13f, FontStyle.Bold),
+                ForeColor = AppStyles.AccentColor,
+                TextAlign = ContentAlignment.MiddleRight
+            };
+
+            card.Controls.Add(accent);
+            card.Controls.Add(lblOwner);
+            card.Controls.Add(lblDetails);
+            card.Controls.Add(lblBilledAt);
+            card.Controls.Add(lblTotal);
+            return card;
+        }
+
+        private Panel BuildReportGrandTotal(decimal grandTotal)
+        {
+            var panel = new Panel
+            {
+                Size      = new Size(pnlReportsResults.ClientSize.Width - 4, 48),
+                BackColor = Color.FromArgb(232, 240, 254)
+            };
+            panel.BorderStyle = BorderStyle.FixedSingle;
+
+            var lblLabel = new Label
+            {
+                Text      = "Grand Total",
+                Location  = new Point(12, 0),
+                Size      = new Size(200, 48),
+                Font      = AppStyles.LabelAccentFont,
+                ForeColor = AppStyles.TextPrimary,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var lblAmount = new Label
+            {
+                Text      = grandTotal.ToString("C"),
+                Location  = new Point(panel.Width - 160, 0),
+                Size      = new Size(150, 48),
+                Font      = new Font("Segoe UI", 14f, FontStyle.Bold),
+                ForeColor = AppStyles.AccentColor,
+                TextAlign = ContentAlignment.MiddleRight
+            };
+
+            panel.Controls.Add(lblLabel);
+            panel.Controls.Add(lblAmount);
+            return panel;
+        }
+
+        private void btnGeneratePdf_Click(object sender, EventArgs e)
+        {
+            if (_reportResults.Count == 0) return;
+            using var dlg = new SaveFileDialog
+            {
+                Title = "Save Billing Report PDF", Filter = "PDF Files|*.pdf",
+                DefaultExt = "pdf",
+                FileName = $"BillingReport_{dtpReportFrom.Value:yyyyMMdd}_{dtpReportTo.Value:yyyyMMdd}.pdf",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+            if (dlg.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                var clientFilter = txtReportClient.Text.Trim();
+                BillingReportPdfGenerator.Generate(
+                    dlg.FileName, _reportResults,
+                    string.IsNullOrWhiteSpace(clientFilter) ? null : clientFilter,
+                    dtpReportFrom.Value.Date, dtpReportTo.Value.Date);
+
+                System.Diagnostics.Process.Start(
+                    new System.Diagnostics.ProcessStartInfo(dlg.FileName) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to generate PDF.\n\n{ex.Message}",
+                    "PDF Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // ── Tab navigation ────────────────────────────────────────────────────

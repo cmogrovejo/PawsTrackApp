@@ -6,7 +6,7 @@ namespace PawsTrack.Application.Interfaces
     {
         Task<WalkServiceCreatedDto> CreateAsync(CreateWalkServiceRequest request);
         Task<IReadOnlyList<DogSummaryDto>> GetDogsByClientAsync(int clientId);
-        Task<IReadOnlyList<WalkServiceCreatedDto>> GetByDateAsync(DateTime date);
+        Task<IReadOnlyList<WalkServiceCreatedDto>> GetByDateAsync(DateTime date, int? walkerId = null);
         Task UpdateAsync(UpdateWalkServiceRequest request);
         Task DeleteAsync(int id);
     }

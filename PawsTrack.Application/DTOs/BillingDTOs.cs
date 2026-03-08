@@ -21,4 +21,16 @@ namespace PawsTrack.Application.DTOs
         decimal  Discount,
         decimal  TotalAmount,
         DateTime CreatedAt);
+
+    public record BillReportRowDto(
+        string   ClientName,
+        string   DogName,
+        DateTime WalkDate,
+        DateTime StartTime,
+        DateTime EndTime,
+        double   DurationHours,
+        decimal  RatePerHour,
+        decimal  Discount,
+        decimal  TotalAmount,
+        DateTime BilledAt);
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PawsTrack.Application.Interfaces;
 using PawsTrack.Presentation.Forms;
 using PawsTrack.Presentation.UserControls;
+using QuestPDF.Infrastructure;
 
 namespace PawsTrack.Presentation
 {
@@ -27,6 +28,7 @@ namespace PawsTrack.Presentation
         static void Main()
         {
             ApplicationConfiguration.Initialize();
+            QuestPDF.Settings.License = LicenseType.Community;
 
             // --- Configuration ---
             var config = new ConfigurationBuilder()
@@ -44,7 +46,7 @@ namespace PawsTrack.Presentation
             // Register WinForms (transient so each form gets a fresh instance)
             services.AddTransient<LoginForm>();
             services.AddTransient<FirstRunSetupForm>();
-            services.AddTransient<MainDashboardWalkerForm>();
+            services.AddTransient<MainDashboardDogWalkerForm>();
             services.AddTransient<MainDashboardAdminForm>();
             services.AddTransient<ClientIntakeUC>();
             services.AddTransient<RegisterDogWalkerForm>();

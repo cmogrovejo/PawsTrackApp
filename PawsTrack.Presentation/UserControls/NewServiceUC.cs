@@ -211,6 +211,7 @@ namespace PawsTrack.Presentation.UserControls
             {
                 var request = new CreateWalkServiceRequest
                 {
+                    WalkerId  = SessionContext.CurrentUser!.Id,
                     ClientId  = _selectedClientId.Value,
                     DogId     = selectedDog.Id,
                     StartTime = startTime,

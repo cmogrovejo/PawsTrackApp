@@ -95,7 +95,7 @@ namespace PawsTrack.Presentation.Forms
             btnLogin.Click   += new System.EventHandler(btnLogin_Click);
 
             // ── lnkRegister ──────────────────────────────────────────────────
-            lnkRegister.Text      = "Register new walker account";
+            lnkRegister.Text      = "Don't have a dog walker account? Create new account here.";
             lnkRegister.Location  = new System.Drawing.Point(30, 370);
             lnkRegister.Size      = new System.Drawing.Size(280, 22);
             lnkRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

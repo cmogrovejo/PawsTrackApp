@@ -74,6 +74,7 @@ namespace PawsTrack.Infrastructure.Persistence
                 entity.HasKey(w => w.Id);
                 entity.Property(w => w.Id).ValueGeneratedOnAdd();
 
+                entity.Property(w => w.WalkerId).IsRequired();
                 entity.Property(w => w.ClientId).IsRequired();
                 entity.Property(w => w.DogId).IsRequired();
                 entity.Property(w => w.StartTime).IsRequired();
@@ -85,6 +86,7 @@ namespace PawsTrack.Infrastructure.Persistence
                 entity.Property(w => w.CreatedAt).IsRequired();
 
                 entity.HasIndex(w => w.StartTime).HasDatabaseName("IX_WalkServices_StartTime");
+                entity.HasIndex(w => w.WalkerId).HasDatabaseName("IX_WalkServices_WalkerId");
             });
         }
 

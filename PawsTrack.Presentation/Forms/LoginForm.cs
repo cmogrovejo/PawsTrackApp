@@ -70,7 +70,7 @@ namespace PawsTrack.Presentation.Forms
 
             Form dashboard = result.User!.Role == UserRole.Admin
                 ? Program.ServiceProvider.GetRequiredService<MainDashboardAdminForm>()
-                : Program.ServiceProvider.GetRequiredService<MainDashboardWalkerForm>();
+                : Program.ServiceProvider.GetRequiredService<MainDashboardDogWalkerForm>();
 
             dashboard.FormClosed += (s, args) =>
             {

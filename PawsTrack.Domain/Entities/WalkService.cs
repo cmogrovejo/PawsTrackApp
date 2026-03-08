@@ -5,6 +5,7 @@ namespace PawsTrack.Domain.Entities
     public class WalkService
     {
         public int        Id        { get; private set; }
+        public int        WalkerId  { get; private set; }
         public int        ClientId  { get; private set; }
         public int        DogId     { get; private set; }
         public DateTime   StartTime { get; private set; }
@@ -14,8 +15,9 @@ namespace PawsTrack.Domain.Entities
 
         private WalkService() { }
 
-        private WalkService(int clientId, int dogId, DateTime startTime, DateTime endTime)
+        private WalkService(int walkerId, int clientId, int dogId, DateTime startTime, DateTime endTime)
         {
+            WalkerId  = walkerId;
             ClientId  = clientId;
             DogId     = dogId;
             StartTime = startTime;
@@ -24,8 +26,10 @@ namespace PawsTrack.Domain.Entities
             CreatedAt = DateTime.Now;
         }
 
-        public static WalkService Create(int clientId, int dogId, DateTime startTime, DateTime endTime)
+        public static WalkService Create(int walkerId, int clientId, int dogId, DateTime startTime, DateTime endTime)
         {
+            if (walkerId <= 0)
+                throw new ArgumentException("WalkerId must be greater than zero.", nameof(walkerId));
             if (clientId <= 0)
                 throw new ArgumentException("ClientId must be greater than zero.", nameof(clientId));
             if (dogId <= 0)
@@ -35,7 +39,15 @@ namespace PawsTrack.Domain.Entities
             if (endTime <= startTime)
                 throw new ArgumentException("End time must be after start time.", nameof(endTime));
 
-            return new WalkService(clientId, dogId, startTime, endTime);
+            return new WalkService(walkerId, clientId, dogId, startTime, endTime);
+        }
+
+        public void Complete()
+        {
+            if (Status == WalkStatus.Completed)
+                throw new InvalidOperationException("Walk service is already completed.");
+
+            Status = WalkStatus.Completed;
         }
 
         public void Reschedule(DateTime newStart, DateTime newEnd)
