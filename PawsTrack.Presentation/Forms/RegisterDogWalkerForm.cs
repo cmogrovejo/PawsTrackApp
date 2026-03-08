@@ -4,11 +4,11 @@ using PawsTrack.Presentation.Helpers;
 
 namespace PawsTrack.Presentation.Forms
 {
-    public partial class RegisterWalkerForm : Form
+    public partial class RegisterDogWalkerForm : Form
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public RegisterWalkerForm(IServiceProvider serviceProvider)
+        public RegisterDogWalkerForm(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             InitializeComponent();

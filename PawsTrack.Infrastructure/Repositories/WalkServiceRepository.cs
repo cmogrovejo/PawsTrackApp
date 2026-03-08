@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PawsTrack.Application.Interfaces;
 using PawsTrack.Domain.Entities;
+using PawsTrack.Domain.Enums;
 using PawsTrack.Infrastructure.Persistence;
 
 namespace PawsTrack.Infrastructure.Repositories
@@ -30,6 +31,29 @@ namespace PawsTrack.Infrastructure.Repositories
                 .Where(s => s.StartTime.Date == date.Date)
                 .OrderBy(s => s.StartTime)
                 .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<WalkService>> SearchAsync(string? clientName, DateTime? date, WalkStatus? status)
+        {
+            var query = _context.WalkServices.AsNoTracking().AsQueryable();
+
+            if (status.HasValue)
+                query = query.Where(ws => ws.Status == status.Value);
+
+            if (date.HasValue)
+                query = query.Where(ws => ws.StartTime.Date == date.Value.Date);
+
+            if (!string.IsNullOrWhiteSpace(clientName))
+            {
+                var lower = clientName.Trim().ToLower();
+                var ids = await _context.Clients
+                    .Where(c => c.FullName.ToLower().Contains(lower))
+                    .Select(c => c.Id)
+                    .ToListAsync();
+                query = query.Where(ws => ids.Contains(ws.ClientId));
+            }
+
+            return await query.OrderBy(ws => ws.StartTime).ToListAsync();
         }
 
         public async Task UpdateAsync(WalkService service)

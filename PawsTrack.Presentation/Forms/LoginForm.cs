@@ -84,7 +84,7 @@ namespace PawsTrack.Presentation.Forms
 
         private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Program.ServiceProvider.GetRequiredService<RegisterWalkerForm>().ShowDialog(this);
+            Program.ServiceProvider.GetRequiredService<RegisterDogWalkerForm>().ShowDialog(this);
         }
 
         private void ResetForm()

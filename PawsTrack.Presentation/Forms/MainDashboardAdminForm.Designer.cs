@@ -93,8 +93,8 @@ namespace PawsTrack.Presentation.Forms
             // ── MainDashboardAdminForm ───────────────────────────────────────
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize          = new System.Drawing.Size(1000, 650);
-            MinimumSize         = new System.Drawing.Size(900, 600);
+            ClientSize          = new System.Drawing.Size(1200, 750);
+            MinimumSize         = new System.Drawing.Size(1100, 700);
             StartPosition       = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text                = "PawsTrack \u2014 Admin";
             Controls.Add(pnlContent);

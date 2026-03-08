@@ -13,6 +13,7 @@ namespace PawsTrack.Infrastructure.Persistence
         public DbSet<Client>      Clients      => Set<Client>();
         public DbSet<Dog>         Dogs         => Set<Dog>();
         public DbSet<WalkService> WalkServices => Set<WalkService>();
+        public DbSet<Bill>        Bills        { get; set; } = null!;
 
         public PawsTrackDbContext(DbContextOptions<PawsTrackDbContext> options) : base(options) { }
 
@@ -23,6 +24,7 @@ namespace PawsTrack.Infrastructure.Persistence
             ConfigureClients(modelBuilder);
             ConfigureDogs(modelBuilder);
             ConfigureWalkServices(modelBuilder);
+            ConfigureBills(modelBuilder);
         }
 
         private static void ConfigureClients(ModelBuilder modelBuilder)
@@ -83,6 +85,24 @@ namespace PawsTrack.Infrastructure.Persistence
                 entity.Property(w => w.CreatedAt).IsRequired();
 
                 entity.HasIndex(w => w.StartTime).HasDatabaseName("IX_WalkServices_StartTime");
+            });
+        }
+
+        private static void ConfigureBills(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Bill>(entity =>
+            {
+                entity.ToTable("Bills");
+                entity.HasKey(b => b.Id);
+                entity.Property(b => b.Id).ValueGeneratedOnAdd();
+
+                entity.Property(b => b.WalkServiceId).IsRequired();
+                entity.Property(b => b.RatePerHour).IsRequired().HasColumnType("decimal(18,2)");
+                entity.Property(b => b.Discount).IsRequired().HasColumnType("decimal(18,2)");
+                entity.Property(b => b.TotalAmount).IsRequired().HasColumnType("decimal(18,2)");
+                entity.Property(b => b.CreatedAt).IsRequired();
+
+                entity.HasIndex(b => b.WalkServiceId).HasDatabaseName("IX_Bills_WalkServiceId");
             });
         }
 

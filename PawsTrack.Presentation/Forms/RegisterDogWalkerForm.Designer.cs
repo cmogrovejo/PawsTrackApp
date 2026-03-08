@@ -1,6 +1,6 @@
 namespace PawsTrack.Presentation.Forms
 {
-    partial class RegisterWalkerForm
+    partial class RegisterDogWalkerForm
     {
         private System.ComponentModel.IContainer components = null;
 

@@ -47,8 +47,9 @@ namespace PawsTrack.Presentation
             services.AddTransient<MainDashboardWalkerForm>();
             services.AddTransient<MainDashboardAdminForm>();
             services.AddTransient<ClientIntakeUC>();
-            services.AddTransient<RegisterWalkerForm>();
+            services.AddTransient<RegisterDogWalkerForm>();
             services.AddTransient<NewServiceUC>();
+            services.AddTransient<CreateBillForm>();
 
             ServiceProvider = services.BuildServiceProvider();
 

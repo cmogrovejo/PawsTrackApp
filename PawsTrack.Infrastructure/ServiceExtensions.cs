@@ -28,6 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<IWalkServiceRepository, WalkServiceRepository>();
+            services.AddScoped<IBillRepository, BillRepository>();
 
             // --- Security ---
             // Singleton is safe: BcryptPasswordHasher holds no mutable state.
@@ -37,6 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IIntakeService, IntakeService>();
             services.AddScoped<IWalkScheduleService, WalkScheduleService>();
+            services.AddScoped<IBillingService, BillingService>();
 
             return services;
         }

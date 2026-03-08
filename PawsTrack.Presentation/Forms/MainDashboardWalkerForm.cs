@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using PawsTrack.Application.DTOs;
 using PawsTrack.Application.Interfaces;
 using PawsTrack.Presentation.Helpers;
 using PawsTrack.Presentation.UserControls;
@@ -55,12 +56,21 @@ namespace PawsTrack.Presentation.Forms
             lblScheduleTitle.ForeColor        = AppStyles.TextPrimary;
             dtpScheduleDate.Font              = AppStyles.LabelFont;
 
-            // Placeholder labels
-            foreach (var lbl in new[] { lblBillingPlaceholder, lblReportsPlaceholder })
-            {
-                lbl.Font      = AppStyles.SubtitleFont;
-                lbl.ForeColor = AppStyles.TextSecondary;
-            }
+            // Billing controls
+            lblBillingTitle.Font             = AppStyles.SubtitleFont;
+            lblBillingTitle.ForeColor        = AppStyles.TextPrimary;
+            pnlBillingHeaderBorder.BackColor = AppStyles.BorderColor;
+            pnlBillingSearchBorder.BackColor = AppStyles.BorderColor;
+            lblBillingClient.Font            = AppStyles.LabelFont;
+            txtBillingClient.Font            = AppStyles.InputFont;
+            chkBillingDate.Font              = AppStyles.LabelFont;
+            dtpBillingDate.Font              = AppStyles.LabelFont;
+            AppStyles.StylePrimaryButton(btnBillingSearch);
+            btnBillingSearch.Height          = 32;
+
+            // Reports placeholder
+            lblReportsPlaceholder.Font      = AppStyles.SubtitleFont;
+            lblReportsPlaceholder.ForeColor = AppStyles.TextSecondary;
         }
 
         private static void StyleTab(Button tab, bool active)
@@ -334,6 +344,122 @@ namespace PawsTrack.Presentation.Forms
             return card;
         }
 
+        // ── Billing ───────────────────────────────────────────────────────────
+
+        private void chkBillingDate_CheckedChanged(object sender, EventArgs e)
+            => dtpBillingDate.Enabled = chkBillingDate.Checked;
+
+        private async void btnBillingSearch_Click(object sender, EventArgs e)
+            => await BuildBillingResultsAsync();
+
+        private async Task BuildBillingResultsAsync()
+        {
+            pnlBillingResults.SuspendLayout();
+
+            foreach (Control old in pnlBillingResults.Controls.Cast<Control>().ToList())
+                old.Dispose();
+            pnlBillingResults.Controls.Clear();
+
+            IReadOnlyList<BillableServiceDto> services;
+            await using (var scope = _serviceProvider.CreateAsyncScope())
+            {
+                var svc = scope.ServiceProvider.GetRequiredService<IBillingService>();
+                var dateFilter = chkBillingDate.Checked ? dtpBillingDate.Value : (DateTime?)null;
+                services = await svc.SearchServicesAsync(txtBillingClient.Text.Trim(), dateFilter);
+            }
+
+            if (services.Count == 0)
+            {
+                var lbl = new Label
+                {
+                    Text      = "No completed services found.",
+                    Dock      = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font      = AppStyles.SubtitleFont,
+                    ForeColor = AppStyles.TextSecondary
+                };
+                pnlBillingResults.Controls.Add(lbl);
+            }
+            else
+            {
+                int y = 8;
+                foreach (var dto in services)
+                {
+                    var row = BuildBillingRow(dto);
+                    row.Location = new Point(2, y);
+                    pnlBillingResults.Controls.Add(row);
+                    y += row.Height + 4;
+                }
+                pnlBillingResults.AutoScrollMinSize = new Size(0, y);
+            }
+
+            pnlBillingResults.ResumeLayout(true);
+        }
+
+        private Panel BuildBillingRow(BillableServiceDto dto)
+        {
+            var row = new Panel
+            {
+                Size      = new Size(pnlBillingResults.ClientSize.Width - 4, 52),
+                BackColor = Color.White
+            };
+            row.BorderStyle = BorderStyle.FixedSingle;
+
+            var accent = new Panel
+            {
+                Location  = new Point(0, 0),
+                Size      = new Size(4, row.Height),
+                BackColor = AppStyles.PrimaryColor
+            };
+
+            int textW = row.Width - 200;
+
+            var lblOwner = new Label
+            {
+                Text         = $"{dto.ClientName}  \u00B7  {dto.DogName}",
+                Location     = new Point(12, 6),
+                Size         = new Size(textW, 18),
+                Font         = AppStyles.LabelAccentFont,
+                ForeColor    = AppStyles.TextPrimary,
+                AutoEllipsis = true
+            };
+
+            var lblDetails = new Label
+            {
+                Text         = $"{dto.StartTime:ddd dd/MM/yyyy}   {dto.StartTime:HH:mm}\u2192{dto.EndTime:HH:mm}   {dto.DurationHours:F1} hrs",
+                Location     = new Point(12, 26),
+                Size         = new Size(textW, 16),
+                Font         = AppStyles.SmallFont,
+                ForeColor    = AppStyles.TextSecondary,
+                AutoEllipsis = true
+            };
+
+            var capturedDto = dto;
+            var btnBill = new Button
+            {
+                Text      = "Bill",
+                Size      = new Size(75, 36),
+                Location  = new Point(row.Width - 90, 8),
+                FlatStyle = FlatStyle.Flat,
+                Font      = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                BackColor = AppStyles.AccentColor,
+                ForeColor = Color.White,
+                Cursor    = Cursors.Hand
+            };
+            btnBill.FlatAppearance.BorderSize = 0;
+            btnBill.Click += (_, _) =>
+            {
+                using var dlg = new CreateBillForm(_serviceProvider, capturedDto);
+                dlg.ShowDialog(this);
+            };
+
+            row.Controls.Add(accent);
+            row.Controls.Add(lblOwner);
+            row.Controls.Add(lblDetails);
+            row.Controls.Add(btnBill);
+            return row;
+        }
+
         // ── Tab navigation ────────────────────────────────────────────────────
 
         private void SetActiveTab(Button activeTab)
@@ -345,6 +471,21 @@ namespace PawsTrack.Presentation.Forms
             pnlBillingView.Visible  = (activeTab == btnTabBilling);
             pnlReportsView.Visible  = (activeTab == btnTabReports);
             pnlIntakeView.Visible   = false;
+            if (pnlBillingView.Visible)
+            {
+                btnNewService.Visible = false;
+                btnNewClient.Visible  = false;
+            }
+            if (pnlReportsView.Visible)
+            {
+                btnNewService.Visible = false;
+                btnNewClient.Visible  = false;
+            }
+             if (pnlScheduleView.Visible)
+            {
+                btnNewService.Visible = true;
+                btnNewClient.Visible  = true;
+            }
         }
 
         private void btnTabSchedule_Click(object sender, EventArgs e) => SetActiveTab(btnTabSchedule);

@@ -69,7 +69,7 @@ namespace PawsTrack.Presentation.Forms
 
         private void btnRegisterWalker_Click(object sender, EventArgs e)
         {
-            Program.ServiceProvider.GetRequiredService<RegisterWalkerForm>().ShowDialog(this);
+            Program.ServiceProvider.GetRequiredService<RegisterDogWalkerForm>().ShowDialog(this);
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
