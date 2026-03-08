@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PawsTrack.Application.Interfaces;
 using PawsTrack.Presentation.Forms;
+using PawsTrack.Presentation.UserControls;
 
 namespace PawsTrack.Presentation
 {
@@ -47,6 +48,7 @@ namespace PawsTrack.Presentation
             services.AddTransient<MainDashboardAdminForm>();
             services.AddTransient<ClientIntakeUC>();
             services.AddTransient<RegisterWalkerForm>();
+            services.AddTransient<NewServiceUC>();
 
             ServiceProvider = services.BuildServiceProvider();
 

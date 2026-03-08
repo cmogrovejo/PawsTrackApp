@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using PawsTrack.Application.Interfaces;
 using PawsTrack.Presentation.Helpers;
+using PawsTrack.Presentation.UserControls;
 
 namespace PawsTrack.Presentation.Forms
 {
@@ -80,15 +82,15 @@ namespace PawsTrack.Presentation.Forms
             dtpScheduleDate.Value = DateTime.Today;
         }
 
-        protected override void OnShown(EventArgs e)
+        protected override async void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            BuildSchedule(dtpScheduleDate.Value);
+            await BuildScheduleAsync(dtpScheduleDate.Value);
         }
 
         // ── Schedule builder ─────────────────────────────────────────────────
 
-        private void BuildSchedule(DateTime date)
+        private async Task BuildScheduleAsync(DateTime date)
         {
             pnlTimeSlots.SuspendLayout();
 
@@ -96,21 +98,43 @@ namespace PawsTrack.Presentation.Forms
                 old.Dispose();
             pnlTimeSlots.Controls.Clear();
 
-            const int rowHeight  = 62;
-            const int startHour  = 8;
-            const int endHour    = 17;
-            const int numHours   = endHour - startHour + 1;
-            const int timeLabelW = 72;
+            IReadOnlyList<Application.DTOs.WalkServiceCreatedDto> services;
+            await using (var scope = _serviceProvider.CreateAsyncScope())
+            {
+                var svc = scope.ServiceProvider.GetRequiredService<IWalkScheduleService>();
+                services = await svc.GetByDateAsync(date);
+            }
+
+            const int minRowHeight = 62;
+            const int cardHeight   = 50;
+            const int cardGap      = 2;
+            const int slotPadTop   = 4;
+            const int startHour    = 7;
+            const int endHour      = 23;
+            const int numHours     = endHour - startHour + 1;
+            const int timeLabelW   = 72;
+
+            int cumulativeY = 0;
 
             for (int i = 0; i < numHours; i++)
             {
-                int hour = startHour + i;
-                int y    = i * rowHeight;
+                int hour      = startHour + i;
+                var slotStart = date.Date.AddHours(hour);
+                var slotEnd   = slotStart.AddHours(1);
+
+                // Services that overlap this hour slot
+                var overlapping = services
+                    .Where(s => s.StartTime < slotEnd && s.EndTime > slotStart)
+                    .ToList();
+
+                // Grow row to fit all cards; minimum is the standard row height
+                int contentH = overlapping.Count * (cardHeight + cardGap);
+                int rowH     = Math.Max(minRowHeight, contentH + slotPadTop + cardGap);
 
                 var pnlRow = new Panel
                 {
-                    Location  = new Point(0, y),
-                    Size      = new Size(pnlTimeSlots.ClientSize.Width, rowHeight),
+                    Location  = new Point(0, cumulativeY),
+                    Size      = new Size(pnlTimeSlots.ClientSize.Width, rowH),
                     BackColor = Color.White,
                     Anchor    = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
@@ -119,7 +143,7 @@ namespace PawsTrack.Presentation.Forms
                 {
                     Text      = $"{hour}:00",
                     Location  = new Point(0, 0),
-                    Size      = new Size(timeLabelW, rowHeight),
+                    Size      = new Size(timeLabelW, rowH),
                     TextAlign = ContentAlignment.TopRight,
                     Padding   = new Padding(0, 10, 10, 0),
                     Font      = AppStyles.SmallFont,
@@ -129,21 +153,65 @@ namespace PawsTrack.Presentation.Forms
                 var pnlVSep = new Panel
                 {
                     Location  = new Point(timeLabelW, 0),
-                    Size      = new Size(1, rowHeight),
+                    Size      = new Size(1, rowH),
                     BackColor = AppStyles.BorderColor
                 };
 
+                int slotW = pnlTimeSlots.ClientSize.Width - timeLabelW - 9;
                 var pnlSlot = new Panel
                 {
-                    Location  = new Point(timeLabelW + 1, 4),
-                    Size      = new Size(pnlTimeSlots.ClientSize.Width - timeLabelW - 9, rowHeight - 4),
+                    Location  = new Point(timeLabelW + 1, slotPadTop),
+                    Size      = new Size(slotW, rowH - slotPadTop),
                     BackColor = Color.White,
                     Anchor    = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                 };
 
+                int cardY = cardGap;
+                foreach (var ws in overlapping)
+                {
+                    bool isFirstSlot = ws.StartTime >= slotStart && ws.StartTime < slotEnd;
+                    var capturedWs   = ws;
+                    var capturedDate = date;
+
+                    var card = BuildServiceCard(
+                        capturedWs, slotW, isFirstSlot,
+                        onView: () =>
+                        {
+                            using var dlg = new ViewServiceForm(capturedWs);
+                            dlg.ShowDialog(this);
+                        },
+                        onEdit: async () =>
+                        {
+                            using var dlg = new EditServiceForm(_serviceProvider, capturedWs);
+                            if (dlg.ShowDialog(this) == DialogResult.OK)
+                                await BuildScheduleAsync(capturedDate);
+                        },
+                        onDelete: async () =>
+                        {
+                            var confirm = MessageBox.Show(
+                                $"Delete the walk service for \"{capturedWs.ClientName}\" \u2014 {capturedWs.DogName}?\n" +
+                                "This action cannot be undone.",
+                                "Confirm Delete",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Warning,
+                                MessageBoxDefaultButton.Button2);
+
+                            if (confirm != DialogResult.Yes) return;
+
+                            await using var scope = _serviceProvider.CreateAsyncScope();
+                            var svc = scope.ServiceProvider.GetRequiredService<IWalkScheduleService>();
+                            await svc.DeleteAsync(capturedWs.Id);
+                            await BuildScheduleAsync(capturedDate);
+                        });
+
+                    card.Location = new Point(2, cardY);
+                    pnlSlot.Controls.Add(card);
+                    cardY += cardHeight + cardGap;
+                }
+
                 var pnlHSep = new Panel
                 {
-                    Location  = new Point(0, rowHeight - 1),
+                    Location  = new Point(0, rowH - 1),
                     Size      = new Size(pnlTimeSlots.ClientSize.Width, 1),
                     BackColor = AppStyles.BorderColor,
                     Anchor    = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right
@@ -154,10 +222,116 @@ namespace PawsTrack.Presentation.Forms
                 pnlRow.Controls.Add(lblTime);
                 pnlRow.Controls.Add(pnlHSep);
                 pnlTimeSlots.Controls.Add(pnlRow);
+
+                cumulativeY += rowH;
             }
 
-            pnlTimeSlots.AutoScrollMinSize = new Size(0, numHours * rowHeight);
+            pnlTimeSlots.AutoScrollMinSize = new Size(0, cumulativeY);
             pnlTimeSlots.ResumeLayout(true);
+        }
+
+        private static Panel BuildServiceCard(
+            Application.DTOs.WalkServiceCreatedDto ws,
+            int        slotWidth,
+            bool       isFirstSlot,
+            Action     onView,
+            Func<Task> onEdit,
+            Func<Task> onDelete)
+        {
+            const int btnW = 65;
+            const int btnH = 40;
+            const int btnGap = 5;
+
+            var (accentColor, bgColor) = ws.Status switch
+            {
+                "Created"    => (AppStyles.AccentColor,        Color.FromArgb(232, 240, 254)),
+                "InProgress" => (Color.FromArgb(46,  125, 50), Color.FromArgb(232, 245, 233)),
+                "Completed"  => (Color.FromArgb(97,  97,  97), Color.FromArgb(245, 245, 245)),
+                _            => (AppStyles.BorderColor,        Color.FromArgb(250, 250, 250))
+            };
+
+            var card = new Panel
+            {
+                Size      = new Size(slotWidth - 6, 50),
+                BackColor = bgColor
+            };
+
+            card.BorderStyle = BorderStyle.FixedSingle;
+
+            var accent = new Panel
+            {
+                Location  = new Point(0, 0),
+                Size      = new Size(4, card.Height),
+                BackColor = accentColor
+            };
+
+            accent.BorderStyle = BorderStyle.Fixed3D;
+
+            // Text area — narrowed to leave room for the button column
+            int textW = card.Width - 230;
+
+            string timeText = isFirstSlot
+                ? $"{ws.StartTime:HH:mm} \u2192 {ws.EndTime:HH:mm}"
+                : $"\u2195 cont. until {ws.EndTime:HH:mm}";
+
+            var lblOwner = new Label
+            {
+                Text         = $"{ws.ClientName}  \u00B7  {ws.DogName}",
+                Location     = new Point(10, 6),
+                Size         = new Size(textW, 18),
+                Font         = AppStyles.LabelAccentFont,
+                ForeColor    = AppStyles.TextPrimary,
+                AutoEllipsis = true
+            };
+
+            var lblDetails = new Label
+            {
+                Text         = $"{timeText}   [{ws.Status}]",
+                Location     = new Point(10, 26),
+                Size         = new Size(textW, 16),
+                Font         = AppStyles.SmallFont,
+                ForeColor    = AppStyles.TextSecondary,
+                AutoEllipsis = true
+            };
+
+            // Action buttons — stacked horizontally on the right
+            int btnY = 5;
+            int btnX = textW + 20;
+            bool canEdit = ws.Status == "Created";
+
+            Button MakeBtn(string text, int x, bool enabled, Color backColor)
+            {
+                var b = new Button
+                {
+                    Text      = text,
+                    Location  = new Point(x, btnY),
+                    Size      = new Size(btnW, btnH),
+                    Enabled   = enabled,
+                    FlatStyle = FlatStyle.Flat,
+                    Font      = new Font("Segoe UI", 7f, FontStyle.Regular),
+                    BackColor = enabled ? backColor : AppStyles.BackColor,
+                    ForeColor = enabled ? Color.White : AppStyles.TextSecondary,
+                    Cursor    = enabled ? Cursors.Hand : Cursors.Default
+                };
+                b.FlatAppearance.BorderSize = 0;
+                return b;
+            }
+
+            var btnView   = MakeBtn("View"  , btnX                      ,    true, AppStyles.PrimaryColor);
+            var btnEdit   = MakeBtn("Edit"  , btnX + btnW + btnGap      , canEdit, AppStyles.EditColor);
+            var btnDelete = MakeBtn("Delete", btnX + (btnW + btnGap) * 2, canEdit, AppStyles.ErrorColor);
+
+            btnView.Click   += (_, _) => onView();
+            btnEdit.Click   += async (_, _) => await onEdit();
+            btnDelete.Click += async (_, _) => await onDelete();
+
+            card.Controls.Add(accent);
+            card.Controls.Add(lblOwner);
+            card.Controls.Add(lblDetails);
+            card.Controls.Add(btnView);
+            card.Controls.Add(btnEdit);
+            card.Controls.Add(btnDelete);
+            return card;
         }
 
         // ── Tab navigation ────────────────────────────────────────────────────
@@ -179,23 +353,36 @@ namespace PawsTrack.Presentation.Forms
 
         // ── Date change ───────────────────────────────────────────────────────
 
-        private void dtpScheduleDate_ValueChanged(object sender, EventArgs e)
-            => BuildSchedule(dtpScheduleDate.Value);
+        private async void dtpScheduleDate_ValueChanged(object sender, EventArgs e)
+            => await BuildScheduleAsync(dtpScheduleDate.Value);
 
         // ── Sidebar actions ───────────────────────────────────────────────────
 
         private void btnNewService_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Service scheduling \u2014 coming soon.",
-                "PawsTrack",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            foreach (Control old in pnlIntakeView.Controls.Cast<Control>().ToList())
+                old.Dispose();
+            pnlIntakeView.Controls.Clear();
+
+            var newServiceUC = Program.ServiceProvider.GetRequiredService<NewServiceUC>();
+            newServiceUC.Dock = DockStyle.Fill;
+            newServiceUC.ServiceCreated += async (_, _) => {
+                SetActiveTab(btnTabSchedule);
+                await BuildScheduleAsync(dtpScheduleDate.Value);
+            };
+            newServiceUC.Cancelled += (_, _) => SetActiveTab(btnTabSchedule);
+            pnlIntakeView.Controls.Add(newServiceUC);
+
+            StyleTab(btnTabSchedule, active: false);
+            StyleTab(btnTabBilling,  active: false);
+            StyleTab(btnTabReports,  active: false);
+            pnlScheduleView.Visible = false;
+            pnlBillingView.Visible  = false;
+            pnlReportsView.Visible  = false;
+            pnlIntakeView.Visible   = true;
         }
 
         private void btnNewDog_Click(object sender, EventArgs e) => OpenIntakeView();
-
-        private void btnNewOwner_Click(object sender, EventArgs e) => OpenIntakeView();
 
         private void OpenIntakeView()
         {

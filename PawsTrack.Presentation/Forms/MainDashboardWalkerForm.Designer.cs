@@ -101,7 +101,7 @@ namespace PawsTrack.Presentation.Forms
             pnlHeader.Location = new Point(0, 0);
             pnlHeader.Margin = new Padding(3, 4, 3, 4);
             pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(1143, 85);
+            pnlHeader.Size = new Size(1312, 85);
             pnlHeader.TabIndex = 2;
             // 
             // lblAppTitle
@@ -122,7 +122,7 @@ namespace PawsTrack.Presentation.Forms
             // btnLogout
             // 
             btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnLogout.Location = new System.Drawing.Point(880, 14);
+            btnLogout.Location = new Point(1049, 14);
             btnLogout.Margin = new Padding(3, 4, 3, 4);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(114, 48);
@@ -141,7 +141,7 @@ namespace PawsTrack.Presentation.Forms
             pnlNav.Location = new Point(0, 85);
             pnlNav.Margin = new Padding(3, 4, 3, 4);
             pnlNav.Name = "pnlNav";
-            pnlNav.Size = new Size(1143, 59);
+            pnlNav.Size = new Size(1312, 59);
             pnlNav.TabIndex = 1;
             // 
             // btnTabSchedule
@@ -180,7 +180,7 @@ namespace PawsTrack.Presentation.Forms
             pnlNavBorder.Location = new Point(0, 58);
             pnlNavBorder.Margin = new Padding(3, 4, 3, 4);
             pnlNavBorder.Name = "pnlNavBorder";
-            pnlNavBorder.Size = new Size(1143, 1);
+            pnlNavBorder.Size = new Size(1312, 1);
             pnlNavBorder.TabIndex = 3;
             // 
             // pnlBody
@@ -191,7 +191,7 @@ namespace PawsTrack.Presentation.Forms
             pnlBody.Location = new Point(0, 144);
             pnlBody.Margin = new Padding(3, 4, 3, 4);
             pnlBody.Name = "pnlBody";
-            pnlBody.Size = new Size(1143, 723);
+            pnlBody.Size = new Size(1312, 809);
             pnlBody.TabIndex = 0;
             // 
             // pnlMainContent
@@ -205,7 +205,7 @@ namespace PawsTrack.Presentation.Forms
             pnlMainContent.Location = new Point(123, 0);
             pnlMainContent.Margin = new Padding(3, 4, 3, 4);
             pnlMainContent.Name = "pnlMainContent";
-            pnlMainContent.Size = new Size(1020, 723);
+            pnlMainContent.Size = new Size(1189, 809);
             pnlMainContent.TabIndex = 0;
             // 
             // pnlScheduleView
@@ -216,7 +216,7 @@ namespace PawsTrack.Presentation.Forms
             pnlScheduleView.Location = new Point(0, 0);
             pnlScheduleView.Margin = new Padding(3, 4, 3, 4);
             pnlScheduleView.Name = "pnlScheduleView";
-            pnlScheduleView.Size = new Size(1020, 723);
+            pnlScheduleView.Size = new Size(1189, 809);
             pnlScheduleView.TabIndex = 0;
             // 
             // pnlTimeSlots
@@ -227,7 +227,7 @@ namespace PawsTrack.Presentation.Forms
             pnlTimeSlots.Location = new Point(0, 62);
             pnlTimeSlots.Margin = new Padding(3, 4, 3, 4);
             pnlTimeSlots.Name = "pnlTimeSlots";
-            pnlTimeSlots.Size = new Size(1020, 661);
+            pnlTimeSlots.Size = new Size(1189, 747);
             pnlTimeSlots.TabIndex = 0;
             // 
             // pnlScheduleHeader
@@ -241,7 +241,7 @@ namespace PawsTrack.Presentation.Forms
             pnlScheduleHeader.Margin = new Padding(3, 4, 3, 4);
             pnlScheduleHeader.Name = "pnlScheduleHeader";
             pnlScheduleHeader.Padding = new Padding(18, 11, 18, 0);
-            pnlScheduleHeader.Size = new Size(1020, 62);
+            pnlScheduleHeader.Size = new Size(1189, 62);
             pnlScheduleHeader.TabIndex = 1;
             // 
             // lblScheduleTitle
@@ -270,7 +270,7 @@ namespace PawsTrack.Presentation.Forms
             pnlScheduleHeaderBorder.Location = new Point(18, 61);
             pnlScheduleHeaderBorder.Margin = new Padding(3, 4, 3, 4);
             pnlScheduleHeaderBorder.Name = "pnlScheduleHeaderBorder";
-            pnlScheduleHeaderBorder.Size = new Size(984, 1);
+            pnlScheduleHeaderBorder.Size = new Size(1153, 1);
             pnlScheduleHeaderBorder.TabIndex = 2;
             // 
             // pnlBillingView
@@ -280,7 +280,7 @@ namespace PawsTrack.Presentation.Forms
             pnlBillingView.Location = new Point(0, 0);
             pnlBillingView.Margin = new Padding(3, 4, 3, 4);
             pnlBillingView.Name = "pnlBillingView";
-            pnlBillingView.Size = new Size(1020, 723);
+            pnlBillingView.Size = new Size(1189, 809);
             pnlBillingView.TabIndex = 1;
             pnlBillingView.Visible = false;
             // 
@@ -289,7 +289,7 @@ namespace PawsTrack.Presentation.Forms
             lblBillingPlaceholder.Dock = DockStyle.Fill;
             lblBillingPlaceholder.Location = new Point(0, 0);
             lblBillingPlaceholder.Name = "lblBillingPlaceholder";
-            lblBillingPlaceholder.Size = new Size(1020, 723);
+            lblBillingPlaceholder.Size = new Size(1189, 809);
             lblBillingPlaceholder.TabIndex = 0;
             lblBillingPlaceholder.Text = "Billing — coming soon.";
             lblBillingPlaceholder.TextAlign = ContentAlignment.MiddleCenter;
@@ -301,7 +301,7 @@ namespace PawsTrack.Presentation.Forms
             pnlReportsView.Location = new Point(0, 0);
             pnlReportsView.Margin = new Padding(3, 4, 3, 4);
             pnlReportsView.Name = "pnlReportsView";
-            pnlReportsView.Size = new Size(1020, 723);
+            pnlReportsView.Size = new Size(1189, 809);
             pnlReportsView.TabIndex = 2;
             pnlReportsView.Visible = false;
             // 
@@ -310,7 +310,7 @@ namespace PawsTrack.Presentation.Forms
             lblReportsPlaceholder.Dock = DockStyle.Fill;
             lblReportsPlaceholder.Location = new Point(0, 0);
             lblReportsPlaceholder.Name = "lblReportsPlaceholder";
-            lblReportsPlaceholder.Size = new Size(1020, 723);
+            lblReportsPlaceholder.Size = new Size(1189, 809);
             lblReportsPlaceholder.TabIndex = 0;
             lblReportsPlaceholder.Text = "Reports — coming soon.";
             lblReportsPlaceholder.TextAlign = ContentAlignment.MiddleCenter;
@@ -321,7 +321,7 @@ namespace PawsTrack.Presentation.Forms
             pnlIntakeView.Dock = DockStyle.Fill;
             pnlIntakeView.Location = new Point(0, 0);
             pnlIntakeView.Name = "pnlIntakeView";
-            pnlIntakeView.Size = new Size(1020, 723);
+            pnlIntakeView.Size = new Size(1189, 809);
             pnlIntakeView.TabIndex = 3;
             pnlIntakeView.Visible = false;
             // 
@@ -335,7 +335,7 @@ namespace PawsTrack.Presentation.Forms
             pnlSidebar.Location = new Point(0, 0);
             pnlSidebar.Margin = new Padding(3, 4, 3, 4);
             pnlSidebar.Name = "pnlSidebar";
-            pnlSidebar.Size = new Size(123, 723);
+            pnlSidebar.Size = new Size(123, 809);
             pnlSidebar.TabIndex = 1;
             // 
             // btnNewService
@@ -364,14 +364,14 @@ namespace PawsTrack.Presentation.Forms
             pnlSidebarBorder.Location = new Point(122, 0);
             pnlSidebarBorder.Margin = new Padding(3, 4, 3, 4);
             pnlSidebarBorder.Name = "pnlSidebarBorder";
-            pnlSidebarBorder.Size = new Size(1, 723);
+            pnlSidebarBorder.Size = new Size(1, 809);
             pnlSidebarBorder.TabIndex = 3;
             // 
             // MainDashboardWalkerForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1143, 867);
+            ClientSize = new Size(1312, 953);
             Controls.Add(pnlBody);
             Controls.Add(pnlNav);
             Controls.Add(pnlHeader);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PawsTrack.Domain.Entities;
+using PawsTrack.Domain.Enums;
 
 namespace PawsTrack.Infrastructure.Persistence
 {
@@ -8,9 +9,10 @@ namespace PawsTrack.Infrastructure.Persistence
     /// </summary>
     public sealed class PawsTrackDbContext : DbContext
     {
-        public DbSet<User>   Users   => Set<User>();
-        public DbSet<Client> Clients => Set<Client>();
-        public DbSet<Dog>    Dogs    => Set<Dog>();
+        public DbSet<User>        Users        => Set<User>();
+        public DbSet<Client>      Clients      => Set<Client>();
+        public DbSet<Dog>         Dogs         => Set<Dog>();
+        public DbSet<WalkService> WalkServices => Set<WalkService>();
 
         public PawsTrackDbContext(DbContextOptions<PawsTrackDbContext> options) : base(options) { }
 
@@ -20,6 +22,7 @@ namespace PawsTrack.Infrastructure.Persistence
             ConfigureUsers(modelBuilder);
             ConfigureClients(modelBuilder);
             ConfigureDogs(modelBuilder);
+            ConfigureWalkServices(modelBuilder);
         }
 
         private static void ConfigureClients(ModelBuilder modelBuilder)
@@ -58,6 +61,28 @@ namespace PawsTrack.Infrastructure.Persistence
                 entity.Property(d => d.MedicalNotes).IsRequired(false).HasMaxLength(2000);
                 entity.Property(d => d.ClientId).IsRequired();
                 entity.Property(d => d.CreatedAt).IsRequired();
+            });
+        }
+
+        private static void ConfigureWalkServices(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<WalkService>(entity =>
+            {
+                entity.ToTable("WalkServices");
+                entity.HasKey(w => w.Id);
+                entity.Property(w => w.Id).ValueGeneratedOnAdd();
+
+                entity.Property(w => w.ClientId).IsRequired();
+                entity.Property(w => w.DogId).IsRequired();
+                entity.Property(w => w.StartTime).IsRequired();
+                entity.Property(w => w.EndTime).IsRequired();
+                entity.Property(w => w.Status)
+                      .IsRequired()
+                      .HasConversion<string>()
+                      .HasMaxLength(20);
+                entity.Property(w => w.CreatedAt).IsRequired();
+
+                entity.HasIndex(w => w.StartTime).HasDatabaseName("IX_WalkServices_StartTime");
             });
         }
 

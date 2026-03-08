@@ -7,9 +7,11 @@
     internal static class AppStyles
     {
         // --- Brand Colors ---
-        public static readonly Color PrimaryColor = Color.FromArgb(52, 107, 161);   // Deep blue
-        public static readonly Color AccentColor = Color.FromArgb(255, 138, 61);   // Warm orange (paws!)
-        public static readonly Color BackgroundColor = Color.FromArgb(245, 247, 250);  // Off-white
+        public static readonly Color PrimaryColor = Color.FromArgb(52, 107, 161);
+        public static readonly Color AccentColor = Color.FromArgb(255, 138, 61);
+        public static readonly Color BackgroundColor = Color.FromArgb(245, 247, 250);
+        public static readonly Color BackColor = Color.FromArgb(230, 230, 230);
+        public static readonly Color EditColor = Color.FromArgb(46, 125, 50);
         public static readonly Color SurfaceColor = Color.White;
         public static readonly Color TextPrimary = Color.FromArgb(30, 40, 55);
         public static readonly Color TextSecondary = Color.FromArgb(110, 120, 140);
