@@ -9,10 +9,12 @@ namespace PawsTrack.Presentation.Forms
         private System.Windows.Forms.Label lblUserInfo;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Panel pnlContent;
-        private System.Windows.Forms.Label lblPlaceholder;
-        private System.Windows.Forms.Label lblSectionActions;
-        private System.Windows.Forms.Button btnNewIntake;
-        private System.Windows.Forms.Button btnRegisterWalker;
+        private System.Windows.Forms.Panel pnlSearchBar;
+        private System.Windows.Forms.Label lblSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Panel pnlSearchBorder;
+        private System.Windows.Forms.Panel pnlWalkerResults;
 
         protected override void Dispose(bool disposing)
         {
@@ -23,18 +25,21 @@ namespace PawsTrack.Presentation.Forms
 
         private void InitializeComponent()
         {
-            pnlHeader         = new System.Windows.Forms.Panel();
-            lblAppTitle       = new System.Windows.Forms.Label();
-            lblUserInfo       = new System.Windows.Forms.Label();
-            btnLogout         = new System.Windows.Forms.Button();
-            pnlContent        = new System.Windows.Forms.Panel();
-            lblSectionActions = new System.Windows.Forms.Label();
-            btnNewIntake      = new System.Windows.Forms.Button();
-            btnRegisterWalker = new System.Windows.Forms.Button();
-            lblPlaceholder    = new System.Windows.Forms.Label();
+            pnlHeader       = new System.Windows.Forms.Panel();
+            lblAppTitle     = new System.Windows.Forms.Label();
+            lblUserInfo     = new System.Windows.Forms.Label();
+            btnLogout       = new System.Windows.Forms.Button();
+            pnlContent      = new System.Windows.Forms.Panel();
+            pnlSearchBar    = new System.Windows.Forms.Panel();
+            lblSearch       = new System.Windows.Forms.Label();
+            txtSearch       = new System.Windows.Forms.TextBox();
+            btnSearch       = new System.Windows.Forms.Button();
+            pnlSearchBorder = new System.Windows.Forms.Panel();
+            pnlWalkerResults = new System.Windows.Forms.Panel();
 
             pnlHeader.SuspendLayout();
             pnlContent.SuspendLayout();
+            pnlSearchBar.SuspendLayout();
             SuspendLayout();
 
             // ── pnlHeader ────────────────────────────────────────────────────
@@ -60,33 +65,45 @@ namespace PawsTrack.Presentation.Forms
             btnLogout.Location = new System.Drawing.Point(880, 14);
             btnLogout.Click   += new System.EventHandler(btnLogout_Click);
 
-            // ── lblSectionActions ────────────────────────────────────────────
-            lblSectionActions.Text     = "Quick Actions";
-            lblSectionActions.Location = new System.Drawing.Point(24, 16);
-            lblSectionActions.Size     = new System.Drawing.Size(200, 24);
+            // ── pnlSearchBorder ──────────────────────────────────────────────
+            pnlSearchBorder.Dock   = System.Windows.Forms.DockStyle.Bottom;
+            pnlSearchBorder.Height = 1;
 
-            // ── btnNewIntake ─────────────────────────────────────────────────
-            btnNewIntake.Text     = "New Client & Dog Intake";
-            btnNewIntake.Location = new System.Drawing.Point(24, 52);
-            btnNewIntake.Size     = new System.Drawing.Size(220, 42);
-            btnNewIntake.Click   += new System.EventHandler(btnNewIntake_Click);
+            // ── lblSearch ────────────────────────────────────────────────────
+            lblSearch.Text     = "Search walkers:";
+            lblSearch.Location = new System.Drawing.Point(18, 18);
+            lblSearch.Size     = new System.Drawing.Size(130, 20);
 
-            // ── btnRegisterWalker ────────────────────────────────────────────
-            btnRegisterWalker.Text     = "Register New Walker";
-            btnRegisterWalker.Location = new System.Drawing.Point(256, 52);
-            btnRegisterWalker.Size     = new System.Drawing.Size(200, 42);
-            btnRegisterWalker.Click   += new System.EventHandler(btnRegisterWalker_Click);
+            // ── txtSearch ────────────────────────────────────────────────────
+            txtSearch.Location = new System.Drawing.Point(155, 14);
+            txtSearch.Size     = new System.Drawing.Size(260, 27);
+            txtSearch.TabIndex = 0;
 
-            // ── lblPlaceholder ───────────────────────────────────────────────
-            lblPlaceholder.Text      = "Admin Dashboard \u2014 more features coming soon.";
-            lblPlaceholder.Dock      = System.Windows.Forms.DockStyle.Fill;
-            lblPlaceholder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // ── btnSearch ────────────────────────────────────────────────────
+            btnSearch.Text     = "Search";
+            btnSearch.Location = new System.Drawing.Point(425, 12);
+            btnSearch.Size     = new System.Drawing.Size(90, 32);
+            btnSearch.TabIndex = 1;
+            btnSearch.Click   += new System.EventHandler(btnSearch_Click);
+
+            // ── pnlSearchBar ─────────────────────────────────────────────────
+            pnlSearchBar.Controls.Add(lblSearch);
+            pnlSearchBar.Controls.Add(txtSearch);
+            pnlSearchBar.Controls.Add(btnSearch);
+            pnlSearchBar.Controls.Add(pnlSearchBorder);
+            pnlSearchBar.Dock      = System.Windows.Forms.DockStyle.Top;
+            pnlSearchBar.Height    = 56;
+            pnlSearchBar.BackColor = System.Drawing.Color.White;
+
+            // ── pnlWalkerResults ─────────────────────────────────────────────
+            pnlWalkerResults.Dock       = System.Windows.Forms.DockStyle.Fill;
+            pnlWalkerResults.AutoScroll = true;
+            pnlWalkerResults.BackColor  = System.Drawing.Color.White;
 
             // ── pnlContent ───────────────────────────────────────────────────
-            pnlContent.Controls.Add(lblPlaceholder);
-            pnlContent.Controls.Add(btnRegisterWalker);
-            pnlContent.Controls.Add(btnNewIntake);
-            pnlContent.Controls.Add(lblSectionActions);
+            // Fill must be added before Top so DockStyle resolves correctly
+            pnlContent.Controls.Add(pnlWalkerResults);
+            pnlContent.Controls.Add(pnlSearchBar);
             pnlContent.Dock      = System.Windows.Forms.DockStyle.Fill;
             pnlContent.BackColor = System.Drawing.Color.FromArgb(245, 247, 250);
 
@@ -100,8 +117,9 @@ namespace PawsTrack.Presentation.Forms
             Controls.Add(pnlContent);
             Controls.Add(pnlHeader);
 
-            pnlHeader.ResumeLayout(false);
+            pnlSearchBar.ResumeLayout(false);
             pnlContent.ResumeLayout(false);
+            pnlHeader.ResumeLayout(false);
             ResumeLayout(false);
         }
     }

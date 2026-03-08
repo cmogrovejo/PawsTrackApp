@@ -125,6 +125,25 @@ namespace PawsTrack.Application.Services
             return true;
         }
 
+        public async Task<IReadOnlyList<UserSummaryDto>> GetWalkersAsync(string? search = null)
+        {
+            var users = await _userRepository.GetAllAsync();
+            IEnumerable<User> walkers = users.Where(u => u.Role == UserRole.Walker);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var lower = search.Trim().ToLower();
+                walkers = walkers.Where(u =>
+                    u.FullName.ToLower().Contains(lower) ||
+                    u.Username.ToLower().Contains(lower));
+            }
+
+            return walkers
+                .OrderBy(u => u.FullName)
+                .Select(u => new UserSummaryDto(u.Id, u.Username, u.FullName, u.IsActive))
+                .ToList();
+        }
+
         private static void ValidatePasswordStrength(string password)
         {
             if (password.Length < 8)

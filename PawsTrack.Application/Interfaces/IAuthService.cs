@@ -12,5 +12,6 @@ namespace PawsTrack.Application.Interfaces
         Task<bool> CreateInitialAdminAsync(string username, string password, string fullName);
         Task<bool> CreateWalkerAsync(string username, string password, string fullName);
         Task<bool> ResetUserPasswordAsync(int userId, string newPassword);
+        Task<IReadOnlyList<UserSummaryDto>> GetWalkersAsync(string? search = null);
     }
 }
