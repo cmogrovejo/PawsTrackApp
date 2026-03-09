@@ -35,153 +35,256 @@ namespace PawsTrack.Presentation.UserControls
 
         private void InitializeComponent()
         {
-            pnlHeader  = new System.Windows.Forms.Panel();
-            lblTitle   = new System.Windows.Forms.Label();
-
-            pnlFooter  = new System.Windows.Forms.Panel();
-            lblError   = new System.Windows.Forms.Label();
-            btnSave    = new System.Windows.Forms.Button();
-            btnCancel  = new System.Windows.Forms.Button();
-
-            pnlBody    = new System.Windows.Forms.Panel();
-
-            lblScheduleSection = new System.Windows.Forms.Label();
-            lblDate            = new System.Windows.Forms.Label();
-            dtpDate            = new System.Windows.Forms.DateTimePicker();
-            lblHourFrom        = new System.Windows.Forms.Label();
-            numHourFrom        = new System.Windows.Forms.NumericUpDown();
-            lblHourTo          = new System.Windows.Forms.Label();
-            numHourTo          = new System.Windows.Forms.NumericUpDown();
-
-            lblClientSection = new System.Windows.Forms.Label();
-            txtClientSearch  = new System.Windows.Forms.TextBox();
-            btnSearchClient  = new System.Windows.Forms.Button();
-            dgvClients       = new System.Windows.Forms.DataGridView();
-
-            lblDogSection = new System.Windows.Forms.Label();
-            cmbDog        = new System.Windows.Forms.ComboBox();
-
+            pnlHeader = new Panel();
+            lblTitle = new Label();
+            pnlFooter = new Panel();
+            lblError = new Label();
+            btnSave = new Button();
+            btnCancel = new Button();
+            pnlBody = new Panel();
+            lblScheduleSection = new Label();
+            lblDate = new Label();
+            dtpDate = new DateTimePicker();
+            lblHourFrom = new Label();
+            numHourFrom = new NumericUpDown();
+            lblHourTo = new Label();
+            numHourTo = new NumericUpDown();
+            lblClientSection = new Label();
+            txtClientSearch = new TextBox();
+            btnSearchClient = new Button();
+            dgvClients = new DataGridView();
+            lblDogSection = new Label();
+            cmbDog = new ComboBox();
+            pnlHeader.SuspendLayout();
+            pnlFooter.SuspendLayout();
+            pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numHourFrom).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numHourTo).BeginInit();
-
-            // ── pnlHeader ──────────────────────────────────────────────────────
-            lblTitle.Text     = "New Service";
-            lblTitle.Location = new System.Drawing.Point(16, 15);
-            lblTitle.Size     = new System.Drawing.Size(300, 24);
-
-            pnlHeader.Dock   = System.Windows.Forms.DockStyle.Top;
-            pnlHeader.Height = 54;
+            ((System.ComponentModel.ISupportInitialize)dgvClients).BeginInit();
+            SuspendLayout();
+            // 
+            // pnlHeader
+            // 
             pnlHeader.Controls.Add(lblTitle);
-
-            // ── pnlFooter ──────────────────────────────────────────────────────
-            lblError.Location = new System.Drawing.Point(16, 6);
-            lblError.Size     = new System.Drawing.Size(472, 18);
-            lblError.Visible  = false;
-
-            btnSave.Text     = "Save Service";
-            btnSave.Location = new System.Drawing.Point(16, 28);
-            btnSave.Size     = new System.Drawing.Size(160, 36);
-            btnSave.Click   += new System.EventHandler(btnSave_Click);
-
-            btnCancel.Text     = "Cancel";
-            btnCancel.Location = new System.Drawing.Point(190, 28);
-            btnCancel.Size     = new System.Drawing.Size(100, 36);
-            btnCancel.Click   += new System.EventHandler(btnCancel_Click);
-
-            pnlFooter.Dock   = System.Windows.Forms.DockStyle.Bottom;
-            pnlFooter.Height = 72;
-            pnlFooter.Controls.AddRange(new System.Windows.Forms.Control[]
-                { lblError, btnSave, btnCancel });
-
-            // ── pnlBody (scrollable content) ───────────────────────────────────
-            // Schedule section
-            lblScheduleSection.Text     = "Schedule";
-            lblScheduleSection.Location = new System.Drawing.Point(16, 16);
-            lblScheduleSection.Size     = new System.Drawing.Size(200, 22);
-
-            lblDate.Text     = "Date *";
-            lblDate.Location = new System.Drawing.Point(16, 48);
-            lblDate.Size     = new System.Drawing.Size(60, 18);
-
-            dtpDate.Format   = System.Windows.Forms.DateTimePickerFormat.Short;
-            dtpDate.Location = new System.Drawing.Point(84, 44);
-            dtpDate.Size     = new System.Drawing.Size(160, 23);
-
-            lblHourFrom.Text     = "Hour From *";
-            lblHourFrom.Location = new System.Drawing.Point(16, 84);
-            lblHourFrom.Size     = new System.Drawing.Size(80, 18);
-
-            numHourFrom.Minimum  = 0;
-            numHourFrom.Maximum  = 23;
-            numHourFrom.Location = new System.Drawing.Point(104, 80);
-            numHourFrom.Size     = new System.Drawing.Size(56, 23);
-
-            lblHourTo.Text     = "Hour To *";
-            lblHourTo.Location = new System.Drawing.Point(180, 84);
-            lblHourTo.Size     = new System.Drawing.Size(72, 18);
-
-            numHourTo.Minimum  = 0;
-            numHourTo.Maximum  = 23;
-            numHourTo.Value    = 1;
-            numHourTo.Location = new System.Drawing.Point(260, 80);
-            numHourTo.Size     = new System.Drawing.Size(56, 23);
-
-            // Client section
-            lblClientSection.Text     = "Client";
-            lblClientSection.Location = new System.Drawing.Point(16, 124);
-            lblClientSection.Size     = new System.Drawing.Size(200, 22);
-
-            txtClientSearch.Location  = new System.Drawing.Point(16, 154);
-            txtClientSearch.Size      = new System.Drawing.Size(330, 23);
-            txtClientSearch.KeyDown  += new System.Windows.Forms.KeyEventHandler(txtClientSearch_KeyDown);
-
-            btnSearchClient.Text     = "Search";
-            btnSearchClient.Location = new System.Drawing.Point(358, 152);
-            btnSearchClient.Size     = new System.Drawing.Size(88, 28);
-            btnSearchClient.Click   += new System.EventHandler(btnSearchClient_Click);
-
-            dgvClients.Location                  = new System.Drawing.Point(16, 190);
-            dgvClients.Size                      = new System.Drawing.Size(460, 130);
-            dgvClients.AllowUserToAddRows        = false;
-            dgvClients.AllowUserToDeleteRows     = false;
-            dgvClients.ReadOnly                  = true;
-            dgvClients.SelectionMode             = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            dgvClients.MultiSelect               = false;
-            dgvClients.AutoSizeColumnsMode       = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dgvClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvClients.SelectionChanged          += new System.EventHandler(dgvClients_SelectionChanged);
-
-            // Dog section
-            lblDogSection.Text     = "Dog";
-            lblDogSection.Location = new System.Drawing.Point(16, 338);
-            lblDogSection.Size     = new System.Drawing.Size(200, 22);
-
-            cmbDog.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            cmbDog.Location      = new System.Drawing.Point(16, 368);
-            cmbDog.Size          = new System.Drawing.Size(460, 23);
-            cmbDog.Enabled       = false;
-
-            pnlBody.Dock                = System.Windows.Forms.DockStyle.Fill;
-            pnlBody.AutoScroll          = true;
-            pnlBody.AutoScrollMinSize   = new System.Drawing.Size(0, 420);
-            pnlBody.Controls.AddRange(new System.Windows.Forms.Control[]
-            {
-                lblScheduleSection, lblDate, dtpDate,
-                lblHourFrom, numHourFrom, lblHourTo, numHourTo,
-                lblClientSection, txtClientSearch, btnSearchClient, dgvClients,
-                lblDogSection, cmbDog
-            });
-
-            // ── UserControl ────────────────────────────────────────────────────
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
-            Size                = new System.Drawing.Size(520, 560);
+            pnlHeader.Dock = DockStyle.Top;
+            pnlHeader.Location = new Point(0, 0);
+            pnlHeader.Margin = new Padding(3, 4, 3, 4);
+            pnlHeader.Name = "pnlHeader";
+            pnlHeader.Size = new Size(900, 72);
+            pnlHeader.TabIndex = 2;
+            // 
+            // lblTitle
+            // 
+            lblTitle.Location = new Point(18, 20);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(343, 32);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "New Service";
+            // 
+            // pnlFooter
+            // 
+            pnlFooter.Controls.Add(lblError);
+            pnlFooter.Controls.Add(btnSave);
+            pnlFooter.Controls.Add(btnCancel);
+            pnlFooter.Dock = DockStyle.Bottom;
+            pnlFooter.Location = new Point(0, 580);
+            pnlFooter.Margin = new Padding(3, 4, 3, 4);
+            pnlFooter.Name = "pnlFooter";
+            pnlFooter.Size = new Size(900, 120);
+            pnlFooter.TabIndex = 1;
+            // 
+            // lblError
+            // 
+            lblError.Location = new Point(18, 8);
+            lblError.Name = "lblError";
+            lblError.Size = new Size(840, 24);
+            lblError.TabIndex = 0;
+            lblError.Visible = false;
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(20, 45);
+            btnSave.Margin = new Padding(3, 4, 3, 4);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(183, 48);
+            btnSave.TabIndex = 1;
+            btnSave.Text = "Save Service";
+            btnSave.Click += btnSave_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(230, 45);
+            btnCancel.Margin = new Padding(3, 4, 3, 4);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(114, 48);
+            btnCancel.TabIndex = 2;
+            btnCancel.Text = "Cancel";
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // pnlBody
+            // 
+            pnlBody.AutoScroll = true;
+            pnlBody.AutoScrollMinSize = new Size(0, 420);
+            pnlBody.Controls.Add(lblScheduleSection);
+            pnlBody.Controls.Add(lblDate);
+            pnlBody.Controls.Add(dtpDate);
+            pnlBody.Controls.Add(lblHourFrom);
+            pnlBody.Controls.Add(numHourFrom);
+            pnlBody.Controls.Add(lblHourTo);
+            pnlBody.Controls.Add(numHourTo);
+            pnlBody.Controls.Add(lblClientSection);
+            pnlBody.Controls.Add(txtClientSearch);
+            pnlBody.Controls.Add(btnSearchClient);
+            pnlBody.Controls.Add(dgvClients);
+            pnlBody.Controls.Add(lblDogSection);
+            pnlBody.Controls.Add(cmbDog);
+            pnlBody.Dock = DockStyle.Fill;
+            pnlBody.Location = new Point(0, 72);
+            pnlBody.Margin = new Padding(3, 4, 3, 4);
+            pnlBody.Name = "pnlBody";
+            pnlBody.Size = new Size(900, 508);
+            pnlBody.TabIndex = 0;
+            // 
+            // lblScheduleSection
+            // 
+            lblScheduleSection.Location = new Point(18, 21);
+            lblScheduleSection.Name = "lblScheduleSection";
+            lblScheduleSection.Size = new Size(229, 29);
+            lblScheduleSection.TabIndex = 0;
+            lblScheduleSection.Text = "Schedule";
+            // 
+            // lblDate
+            // 
+            lblDate.Location = new Point(20, 65);
+            lblDate.Name = "lblDate";
+            lblDate.Size = new Size(70, 24);
+            lblDate.TabIndex = 1;
+            lblDate.Text = "Date *";
+            // 
+            // dtpDate
+            // 
+            dtpDate.Format = DateTimePickerFormat.Short;
+            dtpDate.Location = new Point(96, 60);
+            dtpDate.Margin = new Padding(3, 4, 3, 4);
+            dtpDate.Name = "dtpDate";
+            dtpDate.Size = new Size(180, 27);
+            dtpDate.TabIndex = 2;
+            // 
+            // lblHourFrom
+            // 
+            lblHourFrom.Location = new Point(300, 65);
+            lblHourFrom.Name = "lblHourFrom";
+            lblHourFrom.Size = new Size(91, 24);
+            lblHourFrom.TabIndex = 3;
+            lblHourFrom.Text = "Hour From *";
+            // 
+            // numHourFrom
+            // 
+            numHourFrom.Location = new Point(400, 60);
+            numHourFrom.Margin = new Padding(3, 4, 3, 4);
+            numHourFrom.Maximum = new decimal(new int[] { 23, 0, 0, 0 });
+            numHourFrom.Name = "numHourFrom";
+            numHourFrom.Size = new Size(64, 27);
+            numHourFrom.TabIndex = 4;
+            // 
+            // lblHourTo
+            // 
+            lblHourTo.Location = new Point(510, 62);
+            lblHourTo.Name = "lblHourTo";
+            lblHourTo.Size = new Size(82, 24);
+            lblHourTo.TabIndex = 5;
+            lblHourTo.Text = "Hour To *";
+            // 
+            // numHourTo
+            // 
+            numHourTo.Location = new Point(610, 60);
+            numHourTo.Margin = new Padding(3, 4, 3, 4);
+            numHourTo.Maximum = new decimal(new int[] { 23, 0, 0, 0 });
+            numHourTo.Name = "numHourTo";
+            numHourTo.Size = new Size(64, 27);
+            numHourTo.TabIndex = 6;
+            numHourTo.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // lblClientSection
+            // 
+            lblClientSection.Location = new Point(18, 100);
+            lblClientSection.Name = "lblClientSection";
+            lblClientSection.Size = new Size(60, 29);
+            lblClientSection.TabIndex = 7;
+            lblClientSection.Text = "Client:";
+            // 
+            // txtClientSearch
+            // 
+            txtClientSearch.Location = new Point(18, 130);
+            txtClientSearch.Margin = new Padding(3, 4, 3, 4);
+            txtClientSearch.Name = "txtClientSearch";
+            txtClientSearch.Size = new Size(377, 27);
+            txtClientSearch.TabIndex = 8;
+            txtClientSearch.KeyDown += txtClientSearch_KeyDown;
+            // 
+            // btnSearchClient
+            // 
+            btnSearchClient.Location = new Point(409, 120);
+            btnSearchClient.Margin = new Padding(3, 4, 3, 4);
+            btnSearchClient.Name = "btnSearchClient";
+            btnSearchClient.Size = new Size(101, 37);
+            btnSearchClient.TabIndex = 9;
+            btnSearchClient.Text = "Search";
+            btnSearchClient.Click += btnSearchClient_Click;
+            // 
+            // dgvClients
+            // 
+            dgvClients.AllowUserToAddRows = false;
+            dgvClients.AllowUserToDeleteRows = false;
+            dgvClients.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvClients.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvClients.Location = new Point(18, 180);
+            dgvClients.Margin = new Padding(3, 4, 3, 4);
+            dgvClients.MultiSelect = false;
+            dgvClients.Name = "dgvClients";
+            dgvClients.ReadOnly = true;
+            dgvClients.RowHeadersWidth = 51;
+            dgvClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvClients.Size = new Size(700, 173);
+            dgvClients.TabIndex = 10;
+            dgvClients.SelectionChanged += dgvClients_SelectionChanged;
+            // 
+            // lblDogSection
+            // 
+            lblDogSection.Location = new Point(18, 380);
+            lblDogSection.Name = "lblDogSection";
+            lblDogSection.Size = new Size(229, 29);
+            lblDogSection.TabIndex = 11;
+            lblDogSection.Text = "Dog";
+            // 
+            // cmbDog
+            // 
+            cmbDog.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDog.Enabled = false;
+            cmbDog.Location = new Point(18, 420);
+            cmbDog.Margin = new Padding(3, 4, 3, 4);
+            cmbDog.Name = "cmbDog";
+            cmbDog.Size = new Size(525, 28);
+            cmbDog.TabIndex = 12;
+            // 
+            // NewServiceUC
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(pnlBody);
             Controls.Add(pnlFooter);
             Controls.Add(pnlHeader);
-
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "NewServiceUC";
+            Size = new Size(900, 700);
+            pnlHeader.ResumeLayout(false);
+            pnlFooter.ResumeLayout(false);
+            pnlBody.ResumeLayout(false);
+            pnlBody.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numHourFrom).EndInit();
             ((System.ComponentModel.ISupportInitialize)numHourTo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvClients).EndInit();
+            ResumeLayout(false);
         }
     }
 }

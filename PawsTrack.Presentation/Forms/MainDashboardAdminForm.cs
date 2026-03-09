@@ -105,8 +105,9 @@ namespace PawsTrack.Presentation.Forms
 
             var row = new Panel
             {
-                Size      = new Size(pnlWalkerResults.ClientSize.Width - 16, 56),
-                BackColor = Color.White
+                Size = new Size(1000, 56),
+                BackColor = Color.White,
+                Location = new Point(40, 75),
             };
 
             // Left accent strip

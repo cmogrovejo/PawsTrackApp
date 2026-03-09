@@ -278,7 +278,8 @@ namespace PawsTrack.Presentation.Forms
 
             var card = new Panel
             {
-                Size      = new Size(slotWidth - 6, 50),
+                //Size      = new Size(slotWidth - 6, 50),
+                Size = new Size(1050, 50),
                 BackColor = bgColor
             };
 
@@ -290,8 +291,6 @@ namespace PawsTrack.Presentation.Forms
                 Size      = new Size(4, card.Height),
                 BackColor = accentColor
             };
-
-            accent.BorderStyle = BorderStyle.Fixed3D;
 
             // Text area — narrowed to leave room for the button column
             int textW = card.Width - 230;
@@ -742,7 +741,7 @@ namespace PawsTrack.Presentation.Forms
             newServiceUC.Cancelled += (_, _) => SetActiveTab(btnTabSchedule);
             pnlIntakeView.Controls.Add(newServiceUC);
 
-            StyleTab(btnTabSchedule, active: false);
+            StyleTab(btnTabSchedule, active: true);
             StyleTab(btnTabBilling,  active: false);
             StyleTab(btnTabReports,  active: false);
             pnlScheduleView.Visible = false;
@@ -764,7 +763,7 @@ namespace PawsTrack.Presentation.Forms
             intake.NavigateBack += (_, _) => SetActiveTab(btnTabSchedule);
             pnlIntakeView.Controls.Add(intake);
 
-            StyleTab(btnTabSchedule, active: false);
+            StyleTab(btnTabSchedule, active: true);
             StyleTab(btnTabBilling,  active: false);
             StyleTab(btnTabReports,  active: false);
             pnlScheduleView.Visible = false;

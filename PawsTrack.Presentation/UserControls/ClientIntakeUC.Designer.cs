@@ -9,12 +9,12 @@ namespace PawsTrack.Presentation.Forms
         private System.Windows.Forms.Panel pnlSearchHeader;
         private System.Windows.Forms.Label lblIntakeTitle;
         private System.Windows.Forms.Label lblIntakeSubtitle;
-        private System.Windows.Forms.Button btnBackToDashboard;
         private System.Windows.Forms.Panel pnlSearchBar;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridView dgvClients;
         private System.Windows.Forms.Panel pnlSearchFooter;
+        private System.Windows.Forms.Button btnBackToDashboard;
         private System.Windows.Forms.Button btnAddDogToClient;
         private System.Windows.Forms.Button btnCreateNew;
 
@@ -124,7 +124,7 @@ namespace PawsTrack.Presentation.Forms
             pnlSearch.Location = new Point(0, 0);
             pnlSearch.Margin = new Padding(3, 4, 3, 4);
             pnlSearch.Name = "pnlSearch";
-            pnlSearch.Size = new Size(594, 864);
+            pnlSearch.Size = new Size(900, 864);
             pnlSearch.TabIndex = 1;
             // 
             // dgvClients
@@ -141,38 +141,49 @@ namespace PawsTrack.Presentation.Forms
             dgvClients.ReadOnly = true;
             dgvClients.RowHeadersWidth = 51;
             dgvClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvClients.Size = new Size(594, 624);
+            dgvClients.Size = new Size(1000, 624);
             dgvClients.TabIndex = 0;
             // 
             // pnlSearchFooter
             // 
+            pnlSearchFooter.Controls.Add(btnBackToDashboard);
             pnlSearchFooter.Controls.Add(btnAddDogToClient);
             pnlSearchFooter.Controls.Add(btnCreateNew);
             pnlSearchFooter.Dock = DockStyle.Bottom;
             pnlSearchFooter.Location = new Point(0, 784);
             pnlSearchFooter.Margin = new Padding(3, 4, 3, 4);
             pnlSearchFooter.Name = "pnlSearchFooter";
-            pnlSearchFooter.Size = new Size(594, 80);
+            pnlSearchFooter.Size = new Size(900, 80);
             pnlSearchFooter.TabIndex = 1;
+            // 
+            // btnBackToDashboard
+            // 
+            btnBackToDashboard.Location = new Point(20, 16);
+            btnBackToDashboard.Margin = new Padding(3, 4, 3, 4);
+            btnBackToDashboard.Name = "btnBackToDashboard";
+            btnBackToDashboard.Size = new Size(210, 48);
+            btnBackToDashboard.TabIndex = 0;
+            btnBackToDashboard.Text = "Return to Schedule";
+            btnBackToDashboard.Click += btnBackToDashboard_Click;
             // 
             // btnAddDogToClient
             // 
-            btnAddDogToClient.Location = new Point(18, 16);
+            btnAddDogToClient.Location = new Point(240, 16);
             btnAddDogToClient.Margin = new Padding(3, 4, 3, 4);
             btnAddDogToClient.Name = "btnAddDogToClient";
-            btnAddDogToClient.Size = new Size(274, 48);
+            btnAddDogToClient.Size = new Size(280, 48);
             btnAddDogToClient.TabIndex = 0;
-            btnAddDogToClient.Text = "Add Dog to Selected Client ▶";
+            btnAddDogToClient.Text = "Add Dog to Selected Client";
             btnAddDogToClient.Click += btnAddDogToClient_Click;
             // 
             // btnCreateNew
             // 
-            btnCreateNew.Location = new Point(306, 16);
+            btnCreateNew.Location = new Point(530, 16);
             btnCreateNew.Margin = new Padding(3, 4, 3, 4);
             btnCreateNew.Name = "btnCreateNew";
-            btnCreateNew.Size = new Size(229, 48);
+            btnCreateNew.Size = new Size(230, 48);
             btnCreateNew.TabIndex = 1;
-            btnCreateNew.Text = "+ Create New Client";
+            btnCreateNew.Text = "Create New Client";
             btnCreateNew.Click += btnCreateNew_Click;
             // 
             // pnlSearchBar
@@ -207,7 +218,6 @@ namespace PawsTrack.Presentation.Forms
             // 
             // pnlSearchHeader
             // 
-            pnlSearchHeader.Controls.Add(btnBackToDashboard);
             pnlSearchHeader.Controls.Add(lblIntakeTitle);
             pnlSearchHeader.Controls.Add(lblIntakeSubtitle);
             pnlSearchHeader.Dock = DockStyle.Top;
@@ -217,19 +227,9 @@ namespace PawsTrack.Presentation.Forms
             pnlSearchHeader.Size = new Size(594, 93);
             pnlSearchHeader.TabIndex = 3;
             // 
-            // btnBackToDashboard
-            // 
-            btnBackToDashboard.Location = new Point(18, 21);
-            btnBackToDashboard.Margin = new Padding(3, 4, 3, 4);
-            btnBackToDashboard.Name = "btnBackToDashboard";
-            btnBackToDashboard.Size = new Size(126, 37);
-            btnBackToDashboard.TabIndex = 0;
-            btnBackToDashboard.Text = "← Return to Schedule";
-            btnBackToDashboard.Click += btnBackToDashboard_Click;
-            // 
             // lblIntakeTitle
             // 
-            lblIntakeTitle.Location = new Point(162, 19);
+            lblIntakeTitle.Location = new Point(18, 19);
             lblIntakeTitle.Name = "lblIntakeTitle";
             lblIntakeTitle.Size = new Size(251, 32);
             lblIntakeTitle.TabIndex = 1;
@@ -237,7 +237,7 @@ namespace PawsTrack.Presentation.Forms
             // 
             // lblIntakeSubtitle
             // 
-            lblIntakeSubtitle.Location = new Point(162, 53);
+            lblIntakeSubtitle.Location = new Point(18, 53);
             lblIntakeSubtitle.Name = "lblIntakeSubtitle";
             lblIntakeSubtitle.Size = new Size(411, 24);
             lblIntakeSubtitle.TabIndex = 2;
@@ -252,7 +252,7 @@ namespace PawsTrack.Presentation.Forms
             pnlForm.Location = new Point(0, 0);
             pnlForm.Margin = new Padding(3, 4, 3, 4);
             pnlForm.Name = "pnlForm";
-            pnlForm.Size = new Size(594, 864);
+            pnlForm.Size = new Size(900, 864);
             pnlForm.TabIndex = 0;
             pnlForm.Visible = false;
             // 
@@ -266,7 +266,7 @@ namespace PawsTrack.Presentation.Forms
             pnlScroll.Location = new Point(0, 69);
             pnlScroll.Margin = new Padding(3, 4, 3, 4);
             pnlScroll.Name = "pnlScroll";
-            pnlScroll.Size = new Size(594, 699);
+            pnlScroll.Size = new Size(900, 699);
             pnlScroll.TabIndex = 0;
             // 
             // pnlClientCard
@@ -278,10 +278,10 @@ namespace PawsTrack.Presentation.Forms
             pnlClientCard.Controls.Add(txtPhone);
             pnlClientCard.Controls.Add(lblAddress);
             pnlClientCard.Controls.Add(txtAddress);
-            pnlClientCard.Location = new Point(18, 21);
+            pnlClientCard.Location = new Point(18, 20);
             pnlClientCard.Margin = new Padding(3, 4, 3, 4);
             pnlClientCard.Name = "pnlClientCard";
-            pnlClientCard.Size = new Size(539, 296);
+            pnlClientCard.Size = new Size(900, 190);
             pnlClientCard.TabIndex = 0;
             // 
             // lblClientSection
@@ -294,39 +294,39 @@ namespace PawsTrack.Presentation.Forms
             // 
             // lblFullName
             // 
-            lblFullName.Location = new Point(14, 59);
+            lblFullName.Location = new Point(14, 60);
             lblFullName.Name = "lblFullName";
-            lblFullName.Size = new Size(137, 24);
+            lblFullName.Size = new Size(140, 24);
             lblFullName.TabIndex = 1;
             lblFullName.Text = "Full Name *";
             // 
             // txtFullName
             // 
-            txtFullName.Location = new Point(14, 85);
+            txtFullName.Location = new Point(170, 60);
             txtFullName.Margin = new Padding(3, 4, 3, 4);
             txtFullName.Name = "txtFullName";
-            txtFullName.Size = new Size(511, 27);
+            txtFullName.Size = new Size(600, 27);
             txtFullName.TabIndex = 2;
             // 
             // lblPhone
             // 
-            lblPhone.Location = new Point(14, 139);
+            lblPhone.Location = new Point(14, 100);
             lblPhone.Name = "lblPhone";
-            lblPhone.Size = new Size(137, 24);
+            lblPhone.Size = new Size(140, 24);
             lblPhone.TabIndex = 3;
             lblPhone.Text = "Phone *";
             // 
             // txtPhone
             // 
-            txtPhone.Location = new Point(14, 165);
+            txtPhone.Location = new Point(170, 100);
             txtPhone.Margin = new Padding(3, 4, 3, 4);
             txtPhone.Name = "txtPhone";
-            txtPhone.Size = new Size(228, 27);
+            txtPhone.Size = new Size(230, 27);
             txtPhone.TabIndex = 4;
             // 
             // lblAddress
             // 
-            lblAddress.Location = new Point(14, 219);
+            lblAddress.Location = new Point(14, 140);
             lblAddress.Name = "lblAddress";
             lblAddress.Size = new Size(137, 24);
             lblAddress.TabIndex = 5;
@@ -334,10 +334,10 @@ namespace PawsTrack.Presentation.Forms
             // 
             // txtAddress
             // 
-            txtAddress.Location = new Point(14, 245);
+            txtAddress.Location = new Point(170, 140);
             txtAddress.Margin = new Padding(3, 4, 3, 4);
             txtAddress.Name = "txtAddress";
-            txtAddress.Size = new Size(511, 27);
+            txtAddress.Size = new Size(600, 27);
             txtAddress.TabIndex = 6;
             // 
             // pnlDogCard
@@ -351,15 +351,15 @@ namespace PawsTrack.Presentation.Forms
             pnlDogCard.Controls.Add(cmbBreed);
             pnlDogCard.Controls.Add(lblMedicalNotes);
             pnlDogCard.Controls.Add(txtMedicalNotes);
-            pnlDogCard.Location = new Point(18, 339);
+            pnlDogCard.Location = new Point(18, 210);
             pnlDogCard.Margin = new Padding(3, 4, 3, 4);
             pnlDogCard.Name = "pnlDogCard";
-            pnlDogCard.Size = new Size(539, 360);
+            pnlDogCard.Size = new Size(900, 300);
             pnlDogCard.TabIndex = 1;
             // 
             // lblDogSection
             // 
-            lblDogSection.Location = new Point(14, 16);
+            lblDogSection.Location = new Point(20, 20);
             lblDogSection.Name = "lblDogSection";
             lblDogSection.Size = new Size(229, 29);
             lblDogSection.TabIndex = 0;
@@ -367,134 +367,134 @@ namespace PawsTrack.Presentation.Forms
             // 
             // lblDogName
             // 
-            lblDogName.Location = new Point(14, 59);
+            lblDogName.Location = new Point(20, 60);
             lblDogName.Name = "lblDogName";
-            lblDogName.Size = new Size(137, 24);
+            lblDogName.Size = new Size(140, 30);
             lblDogName.TabIndex = 1;
             lblDogName.Text = "Dog Name *";
             // 
             // txtDogName
             // 
-            txtDogName.Location = new Point(14, 85);
+            txtDogName.Location = new Point(170, 60);
             txtDogName.Margin = new Padding(3, 4, 3, 4);
             txtDogName.Name = "txtDogName";
-            txtDogName.Size = new Size(228, 27);
+            txtDogName.Size = new Size(230, 30);
             txtDogName.TabIndex = 2;
             // 
             // lblAge
             // 
-            lblAge.Location = new Point(274, 59);
+            lblAge.Location = new Point(410, 60);
             lblAge.Name = "lblAge";
-            lblAge.Size = new Size(114, 24);
+            lblAge.Size = new Size(120, 30);
             lblAge.TabIndex = 3;
             lblAge.Text = "Age (years) *";
             // 
             // txtAge
             // 
-            txtAge.Location = new Point(274, 85);
+            txtAge.Location = new Point(540, 60);
             txtAge.Margin = new Padding(3, 4, 3, 4);
             txtAge.Name = "txtAge";
-            txtAge.Size = new Size(91, 27);
+            txtAge.Size = new Size(90, 30);
             txtAge.TabIndex = 4;
             // 
             // lblBreed
             // 
-            lblBreed.Location = new Point(14, 139);
+            lblBreed.Location = new Point(20, 100);
             lblBreed.Name = "lblBreed";
-            lblBreed.Size = new Size(137, 24);
+            lblBreed.Size = new Size(140, 30);
             lblBreed.TabIndex = 5;
             lblBreed.Text = "Breed *";
             // 
             // cmbBreed
             // 
-            cmbBreed.Location = new Point(14, 165);
+            cmbBreed.Location = new Point(170, 100);
             cmbBreed.Margin = new Padding(3, 4, 3, 4);
             cmbBreed.Name = "cmbBreed";
-            cmbBreed.Size = new Size(511, 28);
+            cmbBreed.Size = new Size(510, 30);
             cmbBreed.TabIndex = 6;
             // 
             // lblMedicalNotes
             // 
-            lblMedicalNotes.Location = new Point(14, 219);
+            lblMedicalNotes.Location = new Point(20, 140);
             lblMedicalNotes.Name = "lblMedicalNotes";
-            lblMedicalNotes.Size = new Size(137, 24);
+            lblMedicalNotes.Size = new Size(140, 30);
             lblMedicalNotes.TabIndex = 7;
             lblMedicalNotes.Text = "Medical Notes";
             // 
             // txtMedicalNotes
             // 
-            txtMedicalNotes.Location = new Point(14, 245);
+            txtMedicalNotes.Location = new Point(20, 180);
             txtMedicalNotes.Margin = new Padding(3, 4, 3, 4);
             txtMedicalNotes.Multiline = true;
             txtMedicalNotes.Name = "txtMedicalNotes";
             txtMedicalNotes.ScrollBars = ScrollBars.Vertical;
-            txtMedicalNotes.Size = new Size(511, 92);
+            txtMedicalNotes.Size = new Size(800, 100);
             txtMedicalNotes.TabIndex = 8;
             // 
             // pnlFormFooter
             // 
             pnlFormFooter.Controls.Add(lblError);
+            pnlFormFooter.Controls.Add(btnBack);
             pnlFormFooter.Controls.Add(btnSave);
             pnlFormFooter.Controls.Add(btnCancel);
             pnlFormFooter.Dock = DockStyle.Bottom;
             pnlFormFooter.Location = new Point(0, 768);
             pnlFormFooter.Margin = new Padding(3, 4, 3, 4);
             pnlFormFooter.Name = "pnlFormFooter";
-            pnlFormFooter.Size = new Size(594, 96);
+            pnlFormFooter.Size = new Size(900, 100);
             pnlFormFooter.TabIndex = 1;
             // 
             // lblError
             // 
-            lblError.Location = new Point(18, 8);
+            lblError.Location = new Point(20, 8);
             lblError.Name = "lblError";
-            lblError.Size = new Size(539, 24);
+            lblError.Size = new Size(539, 30);
             lblError.TabIndex = 0;
             lblError.Visible = false;
             // 
+            // btnBack
+            // 
+            btnBack.Location = new Point(20, 40);
+            btnBack.Margin = new Padding(3, 4, 3, 4);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(150, 40);
+            btnBack.TabIndex = 0;
+            btnBack.Text = "Back";
+            btnBack.Click += btnBack_Click;
+            // 
             // btnSave
             // 
-            btnSave.Location = new Point(18, 35);
+            btnSave.Location = new Point(180, 40);
             btnSave.Margin = new Padding(3, 4, 3, 4);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(206, 48);
+            btnSave.Size = new Size(210, 50);
             btnSave.TabIndex = 1;
             btnSave.Text = "Save";
             btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(238, 35);
+            btnCancel.Location = new Point(410, 40);
             btnCancel.Margin = new Padding(3, 4, 3, 4);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(137, 48);
+            btnCancel.Size = new Size(140, 50);
             btnCancel.TabIndex = 2;
             btnCancel.Text = "Cancel";
             btnCancel.Click += btnCancel_Click;
             // 
             // pnlFormHeader
             // 
-            pnlFormHeader.Controls.Add(btnBack);
             pnlFormHeader.Controls.Add(lblFormTitle);
             pnlFormHeader.Dock = DockStyle.Top;
             pnlFormHeader.Location = new Point(0, 0);
             pnlFormHeader.Margin = new Padding(3, 4, 3, 4);
             pnlFormHeader.Name = "pnlFormHeader";
-            pnlFormHeader.Size = new Size(594, 69);
+            pnlFormHeader.Size = new Size(900, 69);
             pnlFormHeader.TabIndex = 2;
-            // 
-            // btnBack
-            // 
-            btnBack.Location = new Point(9, 13);
-            btnBack.Margin = new Padding(3, 4, 3, 4);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(150, 40);
-            btnBack.TabIndex = 0;
-            btnBack.Text = "← Back";
-            btnBack.Click += btnBack_Click;
             // 
             // lblFormTitle
             // 
-            lblFormTitle.Location = new Point(200, 19);
+            lblFormTitle.Location = new Point(20, 19);
             lblFormTitle.Name = "lblFormTitle";
             lblFormTitle.Size = new Size(350, 29);
             lblFormTitle.TabIndex = 1;
@@ -508,7 +508,7 @@ namespace PawsTrack.Presentation.Forms
             Controls.Add(pnlSearch);
             Margin = new Padding(3, 4, 3, 4);
             Name = "ClientIntakeUC";
-            Size = new Size(594, 864);
+            Size = new Size(900, 864);
             pnlSearch.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvClients).EndInit();
             pnlSearchFooter.ResumeLayout(false);

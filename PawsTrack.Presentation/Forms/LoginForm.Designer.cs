@@ -24,21 +24,23 @@ namespace PawsTrack.Presentation.Forms
 
         private void InitializeComponent()
         {
-            pnlCard          = new System.Windows.Forms.Panel();
-            lblTitle         = new System.Windows.Forms.Label();
-            lblSubtitle      = new System.Windows.Forms.Label();
-            lblUsernameField = new System.Windows.Forms.Label();
-            txtUsername      = new System.Windows.Forms.TextBox();
-            lblPasswordField = new System.Windows.Forms.Label();
-            txtPassword      = new System.Windows.Forms.TextBox();
-            lblError         = new System.Windows.Forms.Label();
-            btnLogin         = new System.Windows.Forms.Button();
-            lnkRegister      = new System.Windows.Forms.LinkLabel();
-
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
+            pnlCard = new Panel();
+            lblTitle = new Label();
+            lblSubtitle = new Label();
+            lblUsernameField = new Label();
+            txtUsername = new TextBox();
+            lblPasswordField = new Label();
+            txtPassword = new TextBox();
+            lblError = new Label();
+            btnLogin = new Button();
+            lnkRegister = new LinkLabel();
             pnlCard.SuspendLayout();
             SuspendLayout();
-
-            // ── pnlCard ──────────────────────────────────────────────────────
+            // 
+            // pnlCard
+            // 
+            pnlCard.BackColor = Color.White;
             pnlCard.Controls.Add(lblTitle);
             pnlCard.Controls.Add(lblSubtitle);
             pnlCard.Controls.Add(lblUsernameField);
@@ -48,70 +50,107 @@ namespace PawsTrack.Presentation.Forms
             pnlCard.Controls.Add(lblError);
             pnlCard.Controls.Add(btnLogin);
             pnlCard.Controls.Add(lnkRegister);
-            pnlCard.Location  = new System.Drawing.Point(40, 50);
-            pnlCard.Size      = new System.Drawing.Size(340, 414);
-            pnlCard.BackColor = System.Drawing.Color.White;
-
-            // ── lblTitle ─────────────────────────────────────────────────────
-            lblTitle.Text      = "PawsTrack";
-            lblTitle.Location  = new System.Drawing.Point(30, 28);
-            lblTitle.Size      = new System.Drawing.Size(280, 44);
-            lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
-            // ── lblSubtitle ──────────────────────────────────────────────────
-            lblSubtitle.Text      = "Sign in to your account";
-            lblSubtitle.Location  = new System.Drawing.Point(30, 76);
-            lblSubtitle.Size      = new System.Drawing.Size(280, 22);
-            lblSubtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
-            // ── lblUsernameField ─────────────────────────────────────────────
-            lblUsernameField.Text     = "Username";
-            lblUsernameField.Location = new System.Drawing.Point(30, 118);
-            lblUsernameField.Size     = new System.Drawing.Size(280, 20);
-
-            // ── txtUsername ──────────────────────────────────────────────────
-            txtUsername.Location = new System.Drawing.Point(30, 140);
-            txtUsername.Size     = new System.Drawing.Size(280, 38);
-
-            // ── lblPasswordField ─────────────────────────────────────────────
-            lblPasswordField.Text     = "Password";
-            lblPasswordField.Location = new System.Drawing.Point(30, 196);
-            lblPasswordField.Size     = new System.Drawing.Size(280, 20);
-
-            // ── txtPassword ──────────────────────────────────────────────────
-            txtPassword.Location     = new System.Drawing.Point(30, 218);
-            txtPassword.Size         = new System.Drawing.Size(280, 38);
+            pnlCard.Location = new Point(46, 67);
+            pnlCard.Margin = new Padding(3, 4, 3, 4);
+            pnlCard.Name = "pnlCard";
+            pnlCard.Size = new Size(389, 552);
+            pnlCard.TabIndex = 0;
+            // 
+            // lblTitle
+            // 
+            lblTitle.Location = new Point(34, 37);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(320, 59);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "PawsTrack";
+            lblTitle.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblSubtitle
+            // 
+            lblSubtitle.Location = new Point(34, 101);
+            lblSubtitle.Name = "lblSubtitle";
+            lblSubtitle.Size = new Size(320, 29);
+            lblSubtitle.TabIndex = 1;
+            lblSubtitle.Text = "Sign in to your account";
+            lblSubtitle.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblUsernameField
+            // 
+            lblUsernameField.Location = new Point(34, 157);
+            lblUsernameField.Name = "lblUsernameField";
+            lblUsernameField.Size = new Size(320, 27);
+            lblUsernameField.TabIndex = 2;
+            lblUsernameField.Text = "Username";
+            // 
+            // txtUsername
+            // 
+            txtUsername.Location = new Point(34, 187);
+            txtUsername.Margin = new Padding(3, 4, 3, 4);
+            txtUsername.Name = "txtUsername";
+            txtUsername.Size = new Size(319, 27);
+            txtUsername.TabIndex = 3;
+            // 
+            // lblPasswordField
+            // 
+            lblPasswordField.Location = new Point(34, 261);
+            lblPasswordField.Name = "lblPasswordField";
+            lblPasswordField.Size = new Size(320, 27);
+            lblPasswordField.TabIndex = 4;
+            lblPasswordField.Text = "Password";
+            // 
+            // txtPassword
+            // 
+            txtPassword.Location = new Point(34, 291);
+            txtPassword.Margin = new Padding(3, 4, 3, 4);
+            txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-
-            // ── lblError ─────────────────────────────────────────────────────
-            lblError.Location  = new System.Drawing.Point(30, 268);
-            lblError.Size      = new System.Drawing.Size(280, 36);
-            lblError.Visible   = false;
-
-            // ── btnLogin ─────────────────────────────────────────────────────
-            btnLogin.Text     = "Sign In";
-            btnLogin.Location = new System.Drawing.Point(30, 316);
-            btnLogin.Size     = new System.Drawing.Size(280, 42);
-            btnLogin.Click   += new System.EventHandler(btnLogin_Click);
-
-            // ── lnkRegister ──────────────────────────────────────────────────
-            lnkRegister.Text      = "Don't have a dog walker account? Create new account here.";
-            lnkRegister.Location  = new System.Drawing.Point(30, 370);
-            lnkRegister.Size      = new System.Drawing.Size(280, 22);
-            lnkRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            lnkRegister.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(lnkRegister_LinkClicked);
-
-            // ── LoginForm ────────────────────────────────────────────────────
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize          = new System.Drawing.Size(420, 514);
-            FormBorderStyle     = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            MaximizeBox         = false;
-            StartPosition       = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text                = "PawsTrack - Login";
+            txtPassword.Size = new Size(319, 27);
+            txtPassword.TabIndex = 5;
+            // 
+            // lblError
+            // 
+            lblError.Location = new Point(34, 357);
+            lblError.Name = "lblError";
+            lblError.Size = new Size(320, 48);
+            lblError.TabIndex = 6;
+            lblError.Visible = false;
+            // 
+            // btnLogin
+            // 
+            btnLogin.Location = new Point(34, 421);
+            btnLogin.Margin = new Padding(3, 4, 3, 4);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(320, 56);
+            btnLogin.TabIndex = 7;
+            btnLogin.Text = "Sign In";
+            btnLogin.Click += btnLogin_Click;
+            // 
+            // lnkRegister
+            // 
+            lnkRegister.Location = new Point(34, 493);
+            lnkRegister.Name = "lnkRegister";
+            lnkRegister.Size = new Size(320, 29);
+            lnkRegister.TabIndex = 8;
+            lnkRegister.TabStop = true;
+            lnkRegister.Text = "Don't have a dog walker account? Create new account here.";
+            lnkRegister.TextAlign = ContentAlignment.MiddleCenter;
+            lnkRegister.LinkClicked += lnkRegister_LinkClicked;
+            // 
+            // LoginForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(480, 685);
             Controls.Add(pnlCard);
-
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 4, 3, 4);
+            MaximizeBox = false;
+            Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "PawsTrack - Login";
             pnlCard.ResumeLayout(false);
+            pnlCard.PerformLayout();
             ResumeLayout(false);
         }
     }

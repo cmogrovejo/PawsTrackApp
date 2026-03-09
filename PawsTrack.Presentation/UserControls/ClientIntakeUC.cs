@@ -33,7 +33,8 @@ namespace PawsTrack.Presentation.Forms
             btnBackToDashboard.FlatAppearance.BorderColor = AppStyles.BorderColor;
             btnBackToDashboard.BackColor                  = Color.White;
             btnBackToDashboard.ForeColor                  = AppStyles.TextPrimary;
-            btnBackToDashboard.Font                       = AppStyles.SmallFont;
+            btnBackToDashboard.Font                       = AppStyles.ButtonFont;
+            btnBackToDashboard.Height                     = AppStyles.ButtonHeight;
             btnBackToDashboard.Cursor                     = Cursors.Hand;
 
             lblIntakeTitle.Font        = AppStyles.SubtitleFont;
