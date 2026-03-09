@@ -3,6 +3,7 @@ using Moq;
 using PawsTrack.Application.Interfaces;
 using PawsTrack.Application.Services;
 using PawsTrack.Domain.Entities;
+using PawsTrack.Domain.Enums;
 
 namespace PawsTrack.Tests.Application;
 
@@ -252,5 +253,91 @@ public class AuthServiceTests
         var result = await _sut.ResetUserPasswordAsync(99, "NewPass1");
 
         result.Should().BeFalse();
+    }
+
+    // ── GetWalkersAsync ────────────────────────────────────────────────────
+
+    [Fact]
+    public async Task GetWalkersAsync_ReturnsOnlyUsersWithWalkerRole()
+    {
+        var users = new List<User>
+        {
+            User.Create("admin1",   "h", "Admin One",   UserRole.Admin),
+            User.Create("walker1",  "h", "Alice Smith",  UserRole.Walker),
+            User.Create("walker2",  "h", "Bob Jones",    UserRole.Walker)
+        };
+        _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+
+        var result = await _sut.GetWalkersAsync();
+
+        result.Should().HaveCount(2);
+        result.Should().NotContain(u => u.Username == "admin1");
+    }
+
+    [Fact]
+    public async Task GetWalkersAsync_ResultsAreOrderedByFullName()
+    {
+        var users = new List<User>
+        {
+            User.Create("charlie", "h", "Charlie Brown", UserRole.Walker),
+            User.Create("alice",   "h", "Alice Smith",   UserRole.Walker),
+            User.Create("bob",     "h", "Bob Jones",     UserRole.Walker)
+        };
+        _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+
+        var result = await _sut.GetWalkersAsync();
+
+        result.Select(u => u.FullName).Should().BeInAscendingOrder();
+    }
+
+    [Fact]
+    public async Task GetWalkersAsync_WithSearchTerm_FiltersOnFullNameAndUsername()
+    {
+        var users = new List<User>
+        {
+            User.Create("alice",  "h", "Alice Smith", UserRole.Walker),
+            User.Create("robert", "h", "Robert King", UserRole.Walker)
+        };
+        _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+
+        // Match on full name
+        var byName = await _sut.GetWalkersAsync("alice");
+        byName.Should().ContainSingle(u => u.Username == "alice");
+
+        // Match on username
+        var byUsername = await _sut.GetWalkersAsync("robert");
+        byUsername.Should().ContainSingle(u => u.Username == "robert");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task GetWalkersAsync_WithBlankSearch_ReturnsAllWalkers(string? search)
+    {
+        var users = new List<User>
+        {
+            User.Create("walker1", "h", "Alice Smith", UserRole.Walker),
+            User.Create("walker2", "h", "Bob Jones",   UserRole.Walker)
+        };
+        _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+
+        var result = await _sut.GetWalkersAsync(search);
+
+        result.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public async Task GetWalkersAsync_NoWalkersExist_ReturnsEmptyList()
+    {
+        var users = new List<User>
+        {
+            User.Create("admin1", "h", "Admin One", UserRole.Admin)
+        };
+        _userRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+
+        var result = await _sut.GetWalkersAsync();
+
+        result.Should().BeEmpty();
     }
 }
