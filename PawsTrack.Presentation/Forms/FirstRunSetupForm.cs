@@ -70,7 +70,7 @@ namespace PawsTrack.Presentation.Forms
                     txtFullName.Text.Trim());
 
                 MessageBox.Show(
-                    "Admin account created successfully. Please log in.",
+                    "Admin account created successfully.",
                     "PawsTrack",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);

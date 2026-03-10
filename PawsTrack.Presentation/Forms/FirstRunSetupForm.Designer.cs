@@ -71,7 +71,7 @@ namespace PawsTrack.Presentation.Forms
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(343, 59);
             lblTitle.TabIndex = 0;
-            lblTitle.Text = "Welcome to PawsTrack";
+            lblTitle.Text = "Welcome!";
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblSubtitle

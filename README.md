@@ -33,7 +33,6 @@ The application is built with .NET 8 WinForms and stores data in a SQL Server da
 
 | Requirement | Version |
 |-------------|---------|
-| .NET SDK | 8.0 |
 | SQL Server | 2019 or later (SQL Express is enough) |
 | `dotnet-ef` global tool | 9.0.13 |
 
@@ -42,10 +41,15 @@ if you don't have the dotnet-ef global tool, you can install or update it from y
 ```powershell
 dotnet tool update --global dotnet-ef --version 9.0.13
 ```
+NOTE: .NET is embebbed in the installer.
 
-### Database Configuration
+### Stup and Database Configuration
 
-The connection to database must be set at the first startup of the application, but, for some manual change, the connection string is read from `PawsTrack.Presentation/appsettings.json`:
+Download the installer [here](https://drive.google.com/file/d/18X2HzHLGSEm-syNUTZ2Cd8tUMWWxtYX8/view?usp=drive_link)
+
+Follow the instructions in the [guide document](./PawsTrack_App_Install_and_User_Guide.pdf)
+
+The connection to database will be set at the first startup of the application, but, for some manual change, the connection string is read from `PawsTrack.Presentation/appsettings.json`:
 
 ```json
 {
@@ -54,6 +58,12 @@ The connection to database must be set at the first startup of the application, 
   }
 }
 ```
+
+---
+
+## Initial Design Approach
+
+the initial design made for this application can be found [here](./PawsTrack_DesignDocument.md)
 
 ---
 
@@ -163,3 +173,35 @@ All tests live in `PawsTrack.Tests` and target the Domain and Application layers
 - **Infrastructure tests** (`Infrastructure/`) cover the BCrypt hasher as a thin sanity check.
 
 No test touches a real database. The goal is fast, deterministic feedback on business logic without environment dependencies. Integration-level tests (EF Core, actual SQL Server) are considered out of scope for the current phase.
+
+### About AI Usage
+
+AI helped me in all phases of the product development in many ways:
+
+- **Act as a PM** to help me brainstorming and giving me another point of view of the system.
+- **Fix suggestions** for issues when I found in my tests, bring me options to fix issues letting me analize and implement best solutions.
+- **Check changes** to suggest commit messages more accurate.
+- **Documentation** to give me suggestions about components and pieces of code to have better cotext to document.
+- **Create UI** because it allowed me to create UI components faster than made it manually.
+- **Hashing passwords** acting as a security officer, AI helped me to find a strong method to manage passwords.
+- **Refactorig** when I detected code smells I can ask AI to iterate source code to have code refactors.
+- **PDF Generation** as I need to create a fast PDF file, AI helped me to create PDF report using a standar library whitout making a complex search.
+- **Unit Testing** I can get the code coverage report and get the unit test creation suggestions to improve the code coverage faster.
+
+### Future Improvements
+
+#### Funcionality Improvements
+
+- Iterate to a better UI.
+- Database backup and restore options for the Administrator role.
+- Allow to pick all dogs from a client at the same time.
+- Rate per hour in billing could be a parameter in appsettings and then it can be changed when generating the bill.
+- Start hour and end hour in the schedule can be parameteres in appsettings.
+- Implement localization to support many languages.
+- Control timezones for schedules.
+
+#### Technical Improvements
+
+- Decopling the creation of DB Contexts to have all entities decoupled.
+- Performance testing to check behaviour with high amount of data.
+- Implement UI tests automations.

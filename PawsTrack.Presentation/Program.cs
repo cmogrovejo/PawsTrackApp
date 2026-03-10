@@ -11,10 +11,11 @@ namespace PawsTrack.Presentation
     /// Application entry point.
     /// Responsibilities:
     ///   1. Build configuration (appsettings.json)
-    ///   2. Register all services via DI
-    ///   3. Apply EF Core migrations
-    ///   4. Determine whether to show first-run setup or login form
-    ///   5. Hand off to WinForms message loop
+    ///   2. Show DatabaseSetupForm on first run (when DbConfigured is false)
+    ///   3. Register all services via DI
+    ///   4. Apply EF Core migrations
+    ///   5. Determine whether to show first-run setup or login form
+    ///   6. Hand off to WinForms message loop
     /// </summary>
     internal static class Program
     {
@@ -30,11 +31,19 @@ namespace PawsTrack.Presentation
             ApplicationConfiguration.Initialize();
             QuestPDF.Settings.License = LicenseType.Community;
 
-            // --- Configuration ---
-            var config = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false)
-                .Build();
+            // --- Database Setup (first run) ---
+            // If DbConfigured is false the user hasn't entered connection details yet.
+            // Show the setup form before any DI or EF Core work.
+            var config = LoadConfiguration();
+            if (!string.Equals(config["DbConfigured"], "true", StringComparison.OrdinalIgnoreCase))
+            {
+                using var setupForm = new DatabaseSetupForm();
+                if (setupForm.ShowDialog() != DialogResult.OK)
+                    return; // User closed setup without completing — exit.
+
+                // Reload config so we pick up the connection string just saved.
+                config = LoadConfiguration();
+            }
 
             var connectionString = config.GetConnectionString("PawsTrack")
                 ?? throw new InvalidOperationException("Connection string 'PawsTrack' not found in appsettings.json.");
@@ -86,5 +95,11 @@ namespace PawsTrack.Presentation
 
             System.Windows.Forms.Application.Run(startingForm);
         }
+
+        private static IConfigurationRoot LoadConfiguration() =>
+            new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
     }
 }
